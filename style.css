@@ -1,5 +1,5 @@
 /* =========================
-   RESET
+   BASIC RESET
 ========================= */
 *{
   margin:0;
@@ -9,14 +9,13 @@
 }
 
 body{
-  background:linear-gradient(135deg,#06142e,#0b2a5a,#06142e);
+  background:#0b1d3a;
   color:#fff;
-  min-height:100vh;
   padding:20px;
 }
 
 /* =========================
-   HEADER (LOGO TOP)
+   HEADER
 ========================= */
 .top{
   text-align:center;
@@ -24,164 +23,106 @@ body{
 }
 
 .logo{
-  width:85px;
-  height:85px;
+  width:70px;
+  height:70px;
   object-fit:contain;
-  margin-bottom:10px;
-  filter:drop-shadow(0 0 12px rgba(255,255,255,0.25));
+  margin-bottom:8px;
 }
 
 .top h1{
-  font-size:24px;
-  letter-spacing:2px;
-  text-transform:uppercase;
+  font-size:20px;
 }
 
 .top p{
+  font-size:12px;
   color:#cfe3ff;
-  font-size:13px;
-  margin-top:4px;
 }
 
 /* =========================
-   KPI GRID (IMPORTANT FIX)
+   CARDS (FIXED SIMPLE GRID)
 ========================= */
 .kpi-two{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:20px;
-}
-
-/* CARD BASE */
-.card{
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:16px;
-  padding:16px;
-  backdrop-filter:blur(12px);
-  transition:0.3s ease;
-
-  /* FIX: prevents stretching */
-  min-height:110px;
   display:flex;
-  flex-direction:column;
-  justify-content:center;
+  gap:10px;
+  margin-top:15px;
 }
 
-/* HOVER */
-.card:hover{
-  transform:translateY(-6px);
-  border-color:rgba(255,165,0,0.35);
+.card{
+  flex:1;
+  background:#142b52;
+  padding:15px;
+  border-radius:12px;
 }
 
-/* INCOME CARD */
+/* colors */
 .income{
-  border-color:rgba(0,255,150,0.45);
+  border-left:4px solid #00ff9d;
 }
 
-/* EXPENSE CARD */
 .expense{
-  border-color:rgba(255,80,80,0.5);
+  border-left:4px solid #ff4d4d;
 }
 
-/* =========================
-   NET CARD (SEPARATE FIX)
-========================= */
+/* NET */
 .net-card{
-  margin-top:12px;
+  margin-top:10px;
 }
 
 .net-card .card{
+  background:#102344;
+  padding:15px;
+  border-radius:12px;
   text-align:center;
-  min-height:90px;
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.1);
 }
 
 /* =========================
    FORM
 ========================= */
 .form{
-  margin-top:25px;
+  margin-top:20px;
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-  gap:10px;
+  gap:8px;
 }
 
 input,select,button{
   padding:10px;
   border:none;
-  border-radius:10px;
-  outline:none;
-  font-size:14px;
+  border-radius:8px;
 }
 
 input,select{
-  background:rgba(255,255,255,0.08);
+  background:#1a335f;
   color:#fff;
 }
 
-option{
-  color:#000;
-}
-
-/* BUTTON */
 button{
-  background:linear-gradient(90deg,#ff9800,#ffb347);
+  background:#ff9800;
   font-weight:bold;
   cursor:pointer;
-  transition:0.3s;
-}
-
-button:hover{
-  transform:scale(1.05);
-  box-shadow:0 0 12px rgba(255,165,0,0.4);
 }
 
 /* =========================
    LIST
 ========================= */
 .list{
-  margin-top:20px;
+  margin-top:15px;
 }
 
 .item{
   display:flex;
   justify-content:space-between;
-  padding:12px;
-  background:rgba(255,255,255,0.05);
-  border-radius:10px;
-  margin-top:8px;
-  border:1px solid rgba(255,255,255,0.08);
-  transition:0.2s;
-}
-
-.item:hover{
-  transform:scale(1.02);
-  border-color:rgba(255,255,255,0.2);
+  padding:10px;
+  background:#13284d;
+  border-radius:8px;
+  margin-top:6px;
 }
 
 /* =========================
    CHART
 ========================= */
 .chartBox{
-  margin-top:30px;
-  background:rgba(255,255,255,0.05);
-  padding:20px;
-  border-radius:16px;
-  border:1px solid rgba(255,255,255,0.1);
-}
-
-/* =========================
-   MOBILE FIX
-========================= */
-@media(max-width:600px){
-  .kpi-two{
-    grid-template-columns:1fr;
-  }
-
-  .top h1{
-    font-size:20px;
-  }
+  margin-top:20px;
+  background:#13284d;
+  padding:15px;
+  border-radius:12px;
 }
