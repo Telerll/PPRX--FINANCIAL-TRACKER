@@ -29,11 +29,13 @@ body{
 .logo{
   width:70px;
   height:70px;
+  object-fit:contain;
   margin-bottom:8px;
 }
 
 .top h1{
   font-size:20px;
+  letter-spacing:1px;
 }
 
 .top p{
@@ -42,7 +44,7 @@ body{
 }
 
 /* =========================
-   MAIN LAYOUT (IMPORTANT FIX)
+   KPI LAYOUT (LEFT / RIGHT FIX)
 ========================= */
 .kpi{
   display:flex;
@@ -50,7 +52,7 @@ body{
   margin-top:15px;
 }
 
-/* LEFT + RIGHT EQUAL WIDTH */
+/* CARD BASE */
 .card{
   flex:1;
   background:#142b52;
@@ -59,17 +61,17 @@ body{
   border:1px solid rgba(255,255,255,0.08);
 }
 
-/* LEFT = INCOME */
+/* LEFT - INCOME */
 .income{
   border-left:5px solid #00ff9d;
 }
 
-/* RIGHT = EXPENSES */
+/* RIGHT - EXPENSES */
 .expense{
   border-left:5px solid #ff4d4d;
 }
 
-/* NET (BELOW BOTH) */
+/* NET CARD */
 .net{
   margin-top:10px;
   background:#102344;
@@ -91,21 +93,30 @@ input,select,button{
   padding:10px;
   border:none;
   border-radius:8px;
+  font-size:14px;
 }
 
+/* INPUT STYLE */
 input,select{
   background:#1a335f;
   color:#fff;
+  outline:none;
 }
 
+/* BUTTON */
 button{
   background:#ff9800;
   font-weight:bold;
   cursor:pointer;
+  transition:0.2s;
+}
+
+button:hover{
+  transform:scale(1.03);
 }
 
 /* =========================
-   EVENT CARDS
+   EVENT LIST
 ========================= */
 #eventList{
   margin-top:20px;
@@ -113,11 +124,17 @@ button{
   gap:10px;
 }
 
+/* EVENT CARD */
 .event-card{
   background:#142b52;
   padding:15px;
   border-radius:10px;
   border:1px solid rgba(255,255,255,0.1);
+  transition:0.2s;
+}
+
+.event-card:hover{
+  transform:translateY(-3px);
 }
 
 /* =========================
