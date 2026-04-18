@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>PPRX Event Tracker</title>
+<title>PPRX Financial System</title>
 
 <style>
 
@@ -15,7 +14,7 @@
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:Arial, sans-serif;
+  font-family:Arial;
 }
 
 body{
@@ -25,27 +24,45 @@ body{
 }
 
 /* =========================
-   HEADER
+   TOP KPI
 ========================= */
-.top{
-  text-align:center;
+.kpi-top{
+  display:flex;
+  gap:10px;
   margin-bottom:15px;
 }
 
-.logo{
-  width:70px;
-  height:70px;
-  margin-bottom:8px;
+.kpi-card{
+  flex:1;
+  background:#142b52;
+  padding:15px;
+  border-radius:10px;
+  text-align:center;
 }
 
+.kpi-card h3{
+  font-size:12px;
+  color:#cfe3ff;
+}
+
+.kpi-card h1{
+  font-size:20px;
+  margin-top:5px;
+}
+
+.income-top{ border-left:5px solid #00ff9d; }
+.expense-top{ border-left:5px solid #ff4d4d; }
+.net-top{ border-left:5px solid #ff9800; }
+
 /* =========================
-   KPI (LEFT / RIGHT FIXED)
+   MAIN LAYOUT
 ========================= */
 .kpi{
   display:flex;
   gap:10px;
 }
 
+/* CARD */
 .card{
   flex:1;
   background:#142b52;
@@ -73,35 +90,54 @@ body{
 }
 
 /* =========================
-   FORM
+   BOX
 ========================= */
-.form{
-  margin-top:20px;
-  display:grid;
-  gap:8px;
-}
-
-input,select,button{
-  padding:10px;
-  border:none;
-  border-radius:8px;
-}
-
-input,select{
+.box{
   background:#1a335f;
+  padding:10px;
+  border-radius:8px;
+  margin-top:10px;
+}
+
+.box input{
+  width:100%;
+  margin-top:5px;
+  padding:8px;
+  border:none;
+  border-radius:6px;
+  background:#0f2346;
   color:#fff;
 }
 
+/* =========================
+   BUTTON
+========================= */
 button{
+  margin-top:10px;
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:8px;
   background:#ff9800;
   font-weight:bold;
   cursor:pointer;
 }
 
 /* =========================
+   LIST
+========================= */
+ul{
+  list-style:none;
+  margin-top:10px;
+  font-size:13px;
+  line-height:1.7;
+  opacity:0.9;
+}
+
+/* =========================
    EVENT CARDS
 ========================= */
-#eventList{
+#events{
   margin-top:20px;
   display:grid;
   gap:10px;
@@ -113,151 +149,175 @@ button{
   border-radius:10px;
 }
 
+/* =========================
+   RESPONSIVE
+========================= */
+@media(max-width:600px){
+  .kpi-top,
+  .kpi{
+    flex-direction:column;
+  }
+}
+
 </style>
 
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div class="top">
-  <img src="logo.png" class="logo">
-  <h1>PPRX EVENT TRACKER</h1>
+<h2 style="text-align:center; margin-bottom:10px;">PPRX FINANCIAL SYSTEM</h2>
+
+<!-- TOP KPI -->
+<div class="kpi-top">
+
+  <div class="kpi-card income-top">
+    <h3>Total Income</h3>
+    <h1 id="totalIncome">₱0</h1>
+  </div>
+
+  <div class="kpi-card expense-top">
+    <h3>Total Expenses</h3>
+    <h1 id="totalExpense">₱0</h1>
+  </div>
+
+  <div class="kpi-card net-top">
+    <h3>Net Income</h3>
+    <h1 id="net">₱0</h1>
+  </div>
+
 </div>
 
-<!-- KPI -->
+<!-- MAIN -->
 <div class="kpi">
 
+  <!-- LEFT INCOME -->
   <div class="card income">
-    <h3>Income</h3>
-    <h1 id="income">₱0</h1>
+
+    <h3>Income Module</h3>
+
+    <div class="box">
+      <input id="event" placeholder="Event Name">
+    </div>
+
+    <div class="box">
+      <input id="rate" type="number" placeholder="Rate">
+    </div>
+
+    <button onclick="addIncome()">ADD INCOME</button>
+
+    <h4 style="margin-top:15px;">Event Types</h4>
+    <ul>
+      <li>Corporate Event</li>
+      <li>Wedding</li>
+      <li>Bday / Debut</li>
+      <li>Exhibition & Trade Show</li>
+      <li>Concert & Live Performance</li>
+      <li>Equipment Rental</li>
+    </ul>
+
   </div>
 
+  <!-- RIGHT EXPENSE -->
   <div class="card expense">
-    <h3>Expenses</h3>
-    <h1 id="expense">₱0</h1>
+
+    <h3>Expense Module</h3>
+
+    <div class="box">
+      <input id="expenseName" placeholder="Expense Description">
+    </div>
+
+    <div class="box">
+      <input id="amount" type="number" placeholder="Amount">
+    </div>
+
+    <button onclick="addExpense()">ADD EXPENSE</button>
+
+    <ul>
+      <li>Fuel</li>
+      <li>Transport</li>
+      <li>Food</li>
+      <li>Allowance</li>
+      <li>Rentals</li>
+      <li>Utilities</li>
+      <li>Water</li>
+      <li>Electric</li>
+      <li>Internet</li>
+      <li>Permits</li>
+      <li>Insurance</li>
+    </ul>
+
   </div>
 
 </div>
 
-<!-- NET -->
-<div class="card net">
-  <h3>Net Income</h3>
-  <h1 id="net">₱0</h1>
-</div>
-
-<!-- FORM -->
-<div class="form">
-
-  <input id="event" placeholder="Event Name">
-  <input id="desc" placeholder="Description">
-
-  <select id="type">
-    <option value="income">Income</option>
-    <option value="expense">Expense</option>
-  </select>
-
-  <select id="category">
-    <option>Event Income</option>
-    <option>Rate per Event</option>
-    <option>Transport</option>
-    <option>Fuel</option>
-    <option>Food</option>
-    <option>Allowance</option>
-    <option>Rentals</option>
-    <option>Utilities</option>
-    <option>Water</option>
-    <option>Electric</option>
-    <option>Telephone</option>
-    <option>Miscellaneous</option>
-    <option>Repairs</option>
-    <option>Stocks</option>
-    <option>Office Supplies</option>
-    <option>Spare Parts</option>
-    <option>Permits</option>
-    <option>Insurance</option>
-  </select>
-
-  <input id="amount" type="number" placeholder="Amount">
-
-  <button onclick="add()">ADD</button>
-
-</div>
-
-<!-- EVENTS -->
-<div id="eventList"></div>
+<!-- EVENT OUTPUT -->
+<div id="events"></div>
 
 <script>
 
-let data = JSON.parse(localStorage.getItem("pprx")) || [];
+let income = 0;
+let expense = 0;
+let events = [];
 
-function add(){
+function addIncome(){
 
-  let event = document.getElementById("event").value;
-  let d = document.getElementById("desc").value;
-  let t = document.getElementById("type").value;
-  let c = document.getElementById("category").value;
-  let a = parseFloat(document.getElementById("amount").value);
+  let e = document.getElementById("event").value;
+  let r = parseFloat(document.getElementById("rate").value);
 
-  if(!event || !a) return;
+  if(!e || !r) return;
 
-  data.push({event,d,t,c,a});
+  income += r;
 
-  localStorage.setItem("pprx", JSON.stringify(data));
-
-  render();
-}
-
-function render(){
-
-  let income = 0;
-  let expense = 0;
-
-  let events = {};
-
-  data.forEach(i=>{
-
-    if(i.t === "income") income += i.a;
-    else expense += i.a;
-
-    if(!events[i.event]){
-      events[i.event] = {income:0, expense:0};
-    }
-
-    if(i.t === "income"){
-      events[i.event].income += i.a;
-    }else{
-      events[i.event].expense += i.a;
-    }
-
+  events.push({
+    type:"income",
+    event:e,
+    amount:r
   });
 
-  document.getElementById("income").innerText = "₱"+income;
-  document.getElementById("expense").innerText = "₱"+expense;
+  update();
+}
+
+function addExpense(){
+
+  let e = document.getElementById("expenseName").value;
+  let a = parseFloat(document.getElementById("amount").value);
+
+  if(!e || !a) return;
+
+  expense += a;
+
+  events.push({
+    type:"expense",
+    event:e,
+    amount:a
+  });
+
+  update();
+}
+
+function update(){
+
+  document.getElementById("totalIncome").innerText = "₱"+income;
+  document.getElementById("totalExpense").innerText = "₱"+expense;
   document.getElementById("net").innerText = "₱"+(income-expense);
 
   let html = "";
 
-  for(let key in events){
-
-    let e = events[key];
-    let profit = e.income - e.expense;
+  events.forEach(e=>{
 
     html += `
       <div class="event-card">
-        <h3>${key}</h3>
-        <p>Income: ₱${e.income}</p>
-        <p>Expenses: ₱${e.expense}</p>
-        <h4>Profit: ₱${profit}</h4>
+        <b>${e.type.toUpperCase()}</b>
+        <p>${e.event}</p>
+        <p>₱${e.amount}</p>
       </div>
     `;
-  }
 
-  document.getElementById("eventList").innerHTML = html;
+  });
+
+  document.getElementById("events").innerHTML = html;
 
 }
-
-render();
 
 </script>
 
