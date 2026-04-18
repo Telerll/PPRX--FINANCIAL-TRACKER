@@ -9,6 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
+
 /* =========================
    RESET
 ========================= */
@@ -27,27 +28,38 @@ body{
 }
 
 /* =========================
-   HEADER
+   HEADER (LOGO STYLE)
 ========================= */
-header{
+.top{
   text-align:center;
   margin-bottom:20px;
 }
-header h1{
-  font-size:26px;
-  letter-spacing:1px;
+
+.logo{
+  width:85px;
+  height:85px;
+  object-fit:contain;
+  margin-bottom:10px;
+  filter:drop-shadow(0 0 12px rgba(255,255,255,0.25));
 }
-header p{
+
+.top h1{
+  font-size:24px;
+  letter-spacing:2px;
+}
+
+.top p{
   color:#cfe3ff;
-  font-size:14px;
+  font-size:13px;
+  margin-top:4px;
 }
 
 /* =========================
-   KPI CARDS
+   KPI CARDS (INCOME / EXPENSE)
 ========================= */
-.kpi{
+.kpi-two{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  grid-template-columns:1fr 1fr;
   gap:12px;
   margin-top:20px;
 }
@@ -63,16 +75,21 @@ header p{
 
 .card:hover{
   transform:translateY(-6px);
-  border-color:rgba(255,165,0,0.4);
 }
 
-.card h3{
-  font-size:13px;
-  color:#cfe3ff;
+/* Income glow */
+.income{
+  border-color:rgba(0,255,150,0.35);
 }
-.card h1{
-  margin-top:10px;
-  font-size:20px;
+
+/* Expense glow */
+.expense{
+  border-color:rgba(255,80,80,0.45);
+}
+
+/* NET CARD */
+.net-card{
+  margin-top:12px;
 }
 
 /* =========================
@@ -137,29 +154,37 @@ button:hover{
   padding:20px;
   border-radius:16px;
 }
+
 </style>
 
 </head>
 
 <body>
 
-<header>
-  <h1>PPRX FINANCIAL TRACKER</h1>
-  <p>Income • Expenses • Analytics Dashboard</p>
+<!-- HEADER -->
+<header class="top">
+  <img src="logo.png" class="logo" alt="PPRX Logo">
+  <h1>FINANCIAL TRACKER</h1>
+  <p>PPRX Events Management Services</p>
 </header>
 
 <!-- KPI -->
-<section class="kpi">
-  <div class="card">
+<section class="kpi-two">
+
+  <div class="card income">
     <h3>Total Income</h3>
     <h1 id="income">₱0</h1>
   </div>
 
-  <div class="card">
+  <div class="card expense">
     <h3>Total Expenses</h3>
     <h1 id="expense">₱0</h1>
   </div>
 
+</section>
+
+<!-- NET -->
+<section class="net-card">
   <div class="card">
     <h3>Net Income</h3>
     <h1 id="net">₱0</h1>
@@ -177,7 +202,6 @@ button:hover{
   </select>
 
   <select id="category">
-
     <option>Event Income</option>
     <option>Rate per Event</option>
 
@@ -196,7 +220,6 @@ button:hover{
     <option>Water</option>
     <option>Electric</option>
     <option>Telephone Lines</option>
-
   </select>
 
   <input id="amount" type="number" placeholder="Amount">
