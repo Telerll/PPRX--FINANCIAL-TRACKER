@@ -1,1 +1,189 @@
+/* =========================
+   RESET
+========================= */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: Arial, sans-serif;
+}
 
+body{
+  min-height:100vh;
+  background: radial-gradient(circle at top, rgba(0,140,255,0.25), transparent 40%),
+              linear-gradient(135deg,#06142e,#0b2a5a,#06142e);
+  color:#fff;
+  padding:20px;
+  overflow-x:hidden;
+}
+
+/* =========================
+   HEADER
+========================= */
+header{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+header h1{
+  font-size:28px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+header p{
+  font-size:14px;
+  color:#cfe3ff;
+  margin-top:5px;
+}
+
+/* =========================
+   KPI CARDS
+========================= */
+.kpi{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:14px;
+  margin-top:20px;
+}
+
+.card{
+  position:relative;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius:18px;
+  padding:18px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  transition:0.3s ease;
+  overflow:hidden;
+}
+
+/* orange glow line */
+.card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:3px;
+  background:linear-gradient(90deg,#ff9800,#ffb347,transparent);
+}
+
+.card:hover{
+  transform:translateY(-8px) scale(1.02);
+  border-color:rgba(255,165,0,0.4);
+  box-shadow:0 18px 50px rgba(0,0,0,0.4);
+}
+
+.card h3{
+  font-size:13px;
+  color:#cfe3ff;
+  letter-spacing:0.5px;
+}
+
+.card h1{
+  font-size:22px;
+  margin-top:10px;
+}
+
+/* =========================
+   FORM
+========================= */
+.form{
+  margin-top:25px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+}
+
+input,select{
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  outline:none;
+  background: rgba(255,255,255,0.08);
+  color:#fff;
+  backdrop-filter: blur(10px);
+  transition:0.3s;
+}
+
+input:focus,select:focus{
+  border:1px solid rgba(255,165,0,0.5);
+  transform:scale(1.02);
+}
+
+option{
+  color:#000;
+}
+
+/* =========================
+   BUTTON
+========================= */
+button{
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:bold;
+  background: linear-gradient(90deg,#ff9800,#ffb347);
+  color:#fff;
+  transition:0.3s;
+  box-shadow:0 8px 20px rgba(255,140,0,0.25);
+}
+
+button:hover{
+  transform:scale(1.05);
+  box-shadow:0 12px 30px rgba(255,140,0,0.35);
+}
+
+/* =========================
+   LIST ITEMS
+========================= */
+.list{
+  margin-top:25px;
+}
+
+.item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 14px;
+  margin-top:10px;
+  border-radius:12px;
+  background: rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+  transition:0.3s;
+}
+
+.item:hover{
+  transform:translateX(6px);
+  border-color:rgba(255,165,0,0.3);
+}
+
+/* =========================
+   CHART BOX
+========================= */
+.chartBox{
+  margin-top:30px;
+  padding:20px;
+  border-radius:18px;
+  background: rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width:600px){
+
+  header h1{
+    font-size:22px;
+  }
+
+  .card h1{
+    font-size:18px;
+  }
+
+}
