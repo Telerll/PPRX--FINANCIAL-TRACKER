@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PPRX Financial Tracker</title>
+<title>PPRX Event Profit Tracker</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 
 /* =========================
-   RESET
+   BASE
 ========================= */
 *{
   margin:0;
@@ -21,138 +21,121 @@
 }
 
 body{
-  background:linear-gradient(135deg,#06142e,#0b2a5a,#06142e);
+  background:#0b1d3a;
   color:#fff;
-  min-height:100vh;
   padding:20px;
 }
 
 /* =========================
-   HEADER (LOGO STYLE)
+   HEADER
 ========================= */
 .top{
   text-align:center;
-  margin-bottom:20px;
+  margin-bottom:15px;
 }
 
 .logo{
-  width:85px;
-  height:85px;
+  width:70px;
+  height:70px;
   object-fit:contain;
-  margin-bottom:10px;
-  filter:drop-shadow(0 0 12px rgba(255,255,255,0.25));
+  margin-bottom:8px;
 }
 
 .top h1{
-  font-size:24px;
-  letter-spacing:2px;
+  font-size:20px;
 }
 
 .top p{
+  font-size:12px;
   color:#cfe3ff;
-  font-size:13px;
-  margin-top:4px;
 }
 
 /* =========================
-   KPI CARDS (INCOME / EXPENSE)
+   KPI
 ========================= */
-.kpi-two{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:20px;
+.kpi{
+  display:flex;
+  gap:10px;
+  margin-top:15px;
 }
 
 .card{
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:16px;
-  padding:16px;
-  backdrop-filter:blur(10px);
-  transition:0.3s;
+  flex:1;
+  background:#142b52;
+  padding:15px;
+  border-radius:10px;
 }
 
-.card:hover{
-  transform:translateY(-6px);
-}
-
-/* Income glow */
 .income{
-  border-color:rgba(0,255,150,0.35);
+  border-left:5px solid #00ff9d;
 }
 
-/* Expense glow */
 .expense{
-  border-color:rgba(255,80,80,0.45);
+  border-left:5px solid #ff4d4d;
 }
 
-/* NET CARD */
-.net-card{
-  margin-top:12px;
+.net{
+  margin-top:10px;
+  background:#102344;
+  text-align:center;
 }
 
 /* =========================
-   INPUT FORM
+   FORM
 ========================= */
 .form{
-  margin-top:25px;
+  margin-top:20px;
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-  gap:10px;
+  gap:8px;
 }
 
 input,select,button{
   padding:10px;
   border:none;
-  border-radius:10px;
-  outline:none;
+  border-radius:8px;
 }
 
 input,select{
-  background:rgba(255,255,255,0.08);
+  background:#1a335f;
   color:#fff;
 }
 
-option{
-  color:#000;
-}
-
 button{
-  background:linear-gradient(90deg,#ff9800,#ffb347);
+  background:#ff9800;
   font-weight:bold;
   cursor:pointer;
-  transition:0.3s;
 }
 
-button:hover{
-  transform:scale(1.05);
+/* =========================
+   EVENT CARDS
+========================= */
+#eventList{
+  margin-top:20px;
+  display:grid;
+  gap:10px;
+}
+
+.event-card{
+  background:#142b52;
+  padding:15px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.1);
 }
 
 /* =========================
    LIST
 ========================= */
 .list{
-  margin-top:20px;
+  margin-top:15px;
 }
 
 .item{
   display:flex;
   justify-content:space-between;
   padding:10px;
-  background:rgba(255,255,255,0.05);
-  border-radius:10px;
-  margin-top:8px;
-}
-
-/* =========================
-   CHART
-========================= */
-.chartBox{
-  margin-top:30px;
-  background:rgba(255,255,255,0.05);
-  padding:20px;
-  border-radius:16px;
+  background:#13284d;
+  border-radius:8px;
+  margin-top:6px;
 }
 
 </style>
@@ -162,14 +145,14 @@ button:hover{
 <body>
 
 <!-- HEADER -->
-<header class="top">
-  <img src="logo.png" class="logo" alt="PPRX Logo">
-  <h1>FINANCIAL TRACKER</h1>
-  <p>PPRX Events Management Services</p>
-</header>
+<div class="top">
+  <img src="logo.png" class="logo">
+  <h1>PPRX EVENT PROFIT TRACKER</h1>
+  <p>Income • Expenses • Per Event Analytics</p>
+</div>
 
-<!-- KPI -->
-<section class="kpi-two">
+<!-- KPI TOTALS -->
+<section class="kpi">
 
   <div class="card income">
     <h3>Total Income</h3>
@@ -183,17 +166,15 @@ button:hover{
 
 </section>
 
-<!-- NET -->
-<section class="net-card">
-  <div class="card">
-    <h3>Net Income</h3>
-    <h1 id="net">₱0</h1>
-  </div>
-</section>
+<div class="card net">
+  <h3>Net Income</h3>
+  <h1 id="net">₱0</h1>
+</div>
 
 <!-- FORM -->
-<section class="form">
+<div class="form">
 
+  <input id="event" placeholder="Event Name (Wedding, Concert etc.)">
   <input id="desc" placeholder="Description">
 
   <select id="type">
@@ -204,101 +185,113 @@ button:hover{
   <select id="category">
     <option>Event Income</option>
     <option>Rate per Event</option>
-
-    <option>Rentals</option>
-    <option>Diesel Fuel</option>
-    <option>Transportation</option>
-    <option>Salary</option>
+    <option>Transport</option>
+    <option>Fuel</option>
+    <option>Allowance</option>
     <option>Food</option>
-    <option>Allowances</option>
-    <option>Repair & Maintenance</option>
-    <option>Office Supplies</option>
-    <option>Stocks / Equipment</option>
-    <option>Permits</option>
-    <option>Bills</option>
+    <option>Rentals</option>
     <option>Utilities</option>
     <option>Water</option>
-    <option>Electric</option>
-    <option>Telephone Lines</option>
+    <option>Electric Bills</option>
+    <option>Telephone / Internet</option>
+    <option>Miscellaneous</option>
+    <option>Repairs & Maintenance</option>
+    <option>Stocks</option>
+    <option>Office Supplies</option>
+    <option>Spare Parts</option>
+    <option>Permits</option>
+    <option>Insurance</option>
   </select>
 
   <input id="amount" type="number" placeholder="Amount">
 
   <button onclick="add()">ADD</button>
 
-</section>
+</div>
 
-<!-- LIST -->
-<section class="list" id="list"></section>
-
-<!-- CHART -->
-<section class="chartBox">
-  <canvas id="chart"></canvas>
-</section>
+<!-- EVENT OUTPUT -->
+<div id="eventList"></div>
 
 <script>
 
-let data = JSON.parse(localStorage.getItem("pprx_finance")) || [];
+let data = JSON.parse(localStorage.getItem("pprx")) || [];
 
+/* ADD DATA */
 function add(){
 
+  let event = document.getElementById("event").value;
   let d = document.getElementById("desc").value;
   let t = document.getElementById("type").value;
   let c = document.getElementById("category").value;
   let a = parseFloat(document.getElementById("amount").value);
 
-  if(!d || !a) return;
+  if(!event || !d || !a) return;
 
-  data.push({d,t,c,a});
+  data.push({event,d,t,c,a});
 
-  localStorage.setItem("pprx_finance",JSON.stringify(data));
+  localStorage.setItem("pprx", JSON.stringify(data));
 
   render();
 }
 
+/* GROUP BY EVENT */
+function groupEvents(){
+
+  let events = {};
+
+  data.forEach(i=>{
+
+    if(!events[i.event]){
+      events[i.event] = {income:0, expense:0};
+    }
+
+    if(i.t === "income"){
+      events[i.event].income += i.a;
+    } else {
+      events[i.event].expense += i.a;
+    }
+
+  });
+
+  return events;
+}
+
+/* RENDER */
 function render(){
 
   let income = 0;
   let expense = 0;
 
-  let html = "";
-
   data.forEach(i=>{
-
-    if(i.t=="income") income += i.a;
+    if(i.t === "income") income += i.a;
     else expense += i.a;
-
-    html += `
-      <div class="item">
-        <span>${i.d} (${i.c})</span>
-        <b>₱${i.a}</b>
-      </div>
-    `;
   });
 
   document.getElementById("income").innerText = "₱"+income;
   document.getElementById("expense").innerText = "₱"+expense;
   document.getElementById("net").innerText = "₱"+(income-expense);
 
-  document.getElementById("list").innerHTML = html;
+  /* EVENT CARDS */
+  let events = groupEvents();
+  let html = "";
 
-  drawChart(income,expense);
-}
+  for(let key in events){
 
-function drawChart(i,e){
+    let e = events[key];
+    let profit = e.income - e.expense;
 
-  document.getElementById("chart").remove();
-  document.querySelector(".chartBox").innerHTML = `<canvas id="chart"></canvas>`;
+    html += `
+      <div class="event-card">
+        <h3>${key}</h3>
+        <p>Income: ₱${e.income}</p>
+        <p>Expenses: ₱${e.expense}</p>
+        <h4>Profit: ₱${profit}</h4>
+      </div>
+    `;
+  }
 
-  new Chart(document.getElementById("chart"),{
-    type:"doughnut",
-    data:{
-      labels:["Income","Expenses"],
-      datasets:[{
-        data:[i,e]
-      }]
-    }
-  });
+  document.getElementById("eventList").innerHTML = html;
+
 }
 
 render();
