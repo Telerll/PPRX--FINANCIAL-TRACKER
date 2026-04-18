@@ -29,13 +29,11 @@ body{
 .logo{
   width:70px;
   height:70px;
-  object-fit:contain;
   margin-bottom:8px;
 }
 
 .top h1{
   font-size:20px;
-  letter-spacing:1px;
 }
 
 .top p{
@@ -44,7 +42,7 @@ body{
 }
 
 /* =========================
-   KPI SECTION
+   MAIN LAYOUT (IMPORTANT FIX)
 ========================= */
 .kpi{
   display:flex;
@@ -52,7 +50,7 @@ body{
   margin-top:15px;
 }
 
-/* CARD BASE */
+/* LEFT + RIGHT EQUAL WIDTH */
 .card{
   flex:1;
   background:#142b52;
@@ -61,21 +59,23 @@ body{
   border:1px solid rgba(255,255,255,0.08);
 }
 
-/* INCOME */
+/* LEFT = INCOME */
 .income{
   border-left:5px solid #00ff9d;
 }
 
-/* EXPENSE */
+/* RIGHT = EXPENSES */
 .expense{
   border-left:5px solid #ff4d4d;
 }
 
-/* NET CARD */
+/* NET (BELOW BOTH) */
 .net{
   margin-top:10px;
   background:#102344;
   text-align:center;
+  padding:15px;
+  border-radius:10px;
 }
 
 /* =========================
@@ -91,26 +91,17 @@ input,select,button{
   padding:10px;
   border:none;
   border-radius:8px;
-  font-size:14px;
 }
 
-/* INPUTS */
 input,select{
   background:#1a335f;
   color:#fff;
-  outline:none;
 }
 
-/* BUTTON */
 button{
   background:#ff9800;
   font-weight:bold;
   cursor:pointer;
-  transition:0.2s;
-}
-
-button:hover{
-  transform:scale(1.03);
 }
 
 /* =========================
@@ -127,15 +118,10 @@ button:hover{
   padding:15px;
   border-radius:10px;
   border:1px solid rgba(255,255,255,0.1);
-  transition:0.2s;
-}
-
-.event-card:hover{
-  transform:translateY(-4px);
 }
 
 /* =========================
-   RESPONSIVE
+   MOBILE FIX
 ========================= */
 @media(max-width:600px){
   .kpi{
