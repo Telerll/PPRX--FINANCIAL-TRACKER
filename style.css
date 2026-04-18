@@ -1,5 +1,5 @@
 /* =========================
-   RESET
+   RESET + BASE
 ========================= */
 *{
   margin:0;
@@ -8,174 +8,222 @@
   font-family:Arial, sans-serif;
 }
 
-/* =========================
-   BODY
-========================= */
 body{
-  background:#0b1d3a;
+  background: radial-gradient(circle at top,#0b1f3a,#050b18 60%,#030712);
   color:#fff;
-  padding:20px;
+  padding:12px;
 }
 
 /* =========================
-   TITLE
+   HEADER (METALLIC GLASS)
 ========================= */
-h2{
-  text-align:center;
-  margin-bottom:10px;
-}
-
-/* =========================
-   TOP KPI
-========================= */
-.kpi-top{
+.header{
+  background: linear-gradient(135deg, rgba(0,198,255,0.9), rgba(0,114,255,0.85));
+  backdrop-filter: blur(18px);
+  padding:14px;
+  border-radius:18px;
   display:flex;
-  gap:10px;
-  margin-bottom:15px;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.2);
 }
-
-.kpi-card{
-  flex:1;
-  background:#142b52;
-  padding:15px;
-  border-radius:12px;
-  text-align:center;
-  box-shadow:0 4px 10px rgba(0,0,0,0.2);
-}
-
-.kpi-card h3{
-  font-size:12px;
-  color:#cfe3ff;
-}
-
-.kpi-card h1{
-  font-size:22px;
-  margin-top:5px;
-}
-
-/* COLORS */
-.income-top{ border-left:5px solid #00ff9d; }
-.expense-top{ border-left:5px solid #ff4d4d; }
-.net-top{ border-left:5px solid #ff9800; }
 
 /* =========================
-   MAIN LAYOUT
+   LOGO (METAL STYLE)
+========================= */
+.logo{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  background: linear-gradient(145deg,#ffffff,#cfd9e6);
+  color:#0a58ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  box-shadow:
+    inset 2px 2px 5px rgba(255,255,255,0.8),
+    inset -3px -3px 6px rgba(0,0,0,0.2),
+    0 6px 15px rgba(0,0,0,0.4);
+}
+
+/* =========================
+   KPI CARDS (GLASS + HOVER)
 ========================= */
 .kpi{
-  display:flex;
-  gap:10px;
-  margin-top:10px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:12px;
 }
 
-/* CARD */
 .card{
-  flex:1;
-  background:#142b52;
-  padding:15px;
-  border-radius:12px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.2);
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(14px);
+  border:1px solid rgba(255,255,255,0.1);
+  padding:14px;
+  border-radius:16px;
+  text-align:center;
+  transition:0.3s ease;
+  box-shadow:0 8px 20px rgba(0,0,0,0.25);
 }
 
-/* LEFT INCOME */
-.income{
-  border-left:5px solid #00ff9d;
+/* 🔥 HOVER EFFECT PER CARD */
+.card:hover{
+  transform: translateY(-6px) scale(1.02);
+  background: rgba(255,255,255,0.12);
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.2);
 }
 
-/* RIGHT EXPENSE */
-.expense{
-  border-left:5px solid #ff4d4d;
+/* ACCENT COLORS */
+.income{border-left:4px solid #00ff9d;}
+.expense{border-left:4px solid #ff4d4d;}
+.net{border-left:4px solid #ffb300;}
+
+.card b{
+  font-size:18px;
+  display:block;
+  margin-top:6px;
 }
 
 /* =========================
-   INPUT BOX
+   LEFT / RIGHT MODULES (GLASS BOXES)
 ========================= */
-.box{
-  background:#1a335f;
-  padding:10px;
-  border-radius:10px;
-  margin-top:10px;
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:12px;
 }
 
-.box label{
-  font-size:12px;
-  color:#cfe3ff;
+.module{
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(16px);
+  border:1px solid rgba(255,255,255,0.08);
+  padding:14px;
+  border-radius:16px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
+  transition:0.3s;
 }
 
+/* MODULE HOVER */
+.module:hover{
+  transform: translateY(-4px);
+  background: rgba(255,255,255,0.08);
+}
+
+/* =========================
+   INPUT STYLE (MODERN GLASS)
+========================= */
 input,select{
   width:100%;
-  margin-top:5px;
+  margin-top:8px;
   padding:10px;
-  border:none;
-  border-radius:8px;
-  background:#0f2346;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.1);
+  background: rgba(15,42,82,0.6);
   color:#fff;
   outline:none;
-  font-size:14px;
+  backdrop-filter: blur(10px);
+}
+
+input:focus,select:focus{
+  border:1px solid #00c6ff;
+  box-shadow:0 0 8px rgba(0,198,255,0.5);
 }
 
 /* =========================
-   BUTTON
+   BUTTON (METAL GRADIENT)
 ========================= */
 button{
   width:100%;
   margin-top:10px;
-  padding:12px;
+  padding:10px;
   border:none;
   border-radius:10px;
-  background:linear-gradient(90deg,#ff9800,#ffb347);
+  background: linear-gradient(135deg,#ff9800,#ffb347,#ffd28a);
   font-weight:bold;
   cursor:pointer;
   transition:0.2s;
+  box-shadow:0 6px 15px rgba(0,0,0,0.3);
 }
 
+/* BUTTON HOVER */
 button:hover{
-  transform:scale(1.02);
+  transform: scale(1.03);
+  box-shadow:0 10px 25px rgba(0,0,0,0.5);
 }
 
 /* =========================
    FILTER BOX
 ========================= */
 .filter{
-  margin-top:15px;
-  background:#142b52;
+  margin-top:12px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(14px);
   padding:12px;
-  border-radius:12px;
+  border-radius:16px;
   display:grid;
   gap:8px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.2);
-}
-
-/* =========================
-   EVENT LIST
-========================= */
-#events{
-  margin-top:20px;
-  display:grid;
-  gap:10px;
-}
-
-.event-card{
-  background:#142b52;
-  padding:12px;
-  border-radius:10px;
   border:1px solid rgba(255,255,255,0.08);
-  font-size:13px;
-  line-height:1.5;
 }
 
 /* =========================
-   SMALL TEXT
+   REPORT ITEMS (GLASS LIST)
 ========================= */
-small{
-  opacity:0.7;
+.item{
+  background: rgba(255,255,255,0.06);
+  padding:10px;
+  border-radius:12px;
+  margin-top:8px;
+  font-size:12px;
+  border-left:3px solid rgba(255,255,255,0.2);
+  transition:0.2s;
+}
+
+/* ITEM HOVER */
+.item:hover{
+  background: rgba(255,255,255,0.12);
+  transform: translateX(4px);
+}
+
+/* =========================
+   PROFIT PANEL
+========================= */
+.profit{
+  margin-top:12px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(14px);
+  padding:12px;
+  border-radius:16px;
+}
+
+/* =========================
+   CHART BOX
+========================= */
+.chart{
+  margin-top:12px;
+  background: rgba(255,255,255,0.05);
+  padding:12px;
+  border-radius:16px;
+  backdrop-filter: blur(14px);
 }
 
 /* =========================
    RESPONSIVE
 ========================= */
-@media(max-width:600px){
-  .kpi-top,
+@media(max-width:768px){
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
   .kpi{
-    flex-direction:column;
+    grid-template-columns:1fr;
   }
 }
