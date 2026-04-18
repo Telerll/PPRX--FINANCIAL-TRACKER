@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PPRX Financial System Pro</title>
+<title>PPRX Financial System</title>
 
-<!-- EXCEL LIBRARY -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
 
 /* =========================
-   RESET
+   BASE
 ========================= */
 *{
   margin:0;
@@ -21,138 +21,131 @@
 }
 
 body{
-  background:#0b1d3a;
+  background:#071a33;
   color:#fff;
-  padding:20px;
+  padding:12px;
 }
 
 /* =========================
-   TOP KPI
+   HEADER
 ========================= */
-.kpi-top{
-  display:flex;
-  gap:10px;
-  margin-bottom:15px;
+.header{
+  background:linear-gradient(135deg,#00c6ff,#0072ff);
+  padding:14px;
+  border-radius:16px;
+  text-align:center;
+  font-weight:bold;
 }
 
-.kpi-card{
-  flex:1;
-  background:#142b52;
-  padding:15px;
-  border-radius:10px;
+/* =========================
+   KPI
+========================= */
+.kpi{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:10px;
+}
+
+.card{
+  background:rgba(255,255,255,0.06);
+  padding:12px;
+  border-radius:14px;
   text-align:center;
 }
 
-.kpi-card h3{
-  font-size:12px;
-  color:#cfe3ff;
-}
-
-.kpi-card h1{
-  font-size:20px;
-  margin-top:5px;
-}
-
-.income-top{ border-left:5px solid #00ff9d; }
-.expense-top{ border-left:5px solid #ff4d4d; }
-.net-top{ border-left:5px solid #ff9800; }
+.income{border-left:4px solid #00ff9d;}
+.expense{border-left:4px solid #ff4d4d;}
+.net{border-left:4px solid #ffb300;}
 
 /* =========================
-   MAIN
+   MAIN LEFT / RIGHT
 ========================= */
-.kpi{
-  display:flex;
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
   gap:10px;
-}
-
-/* CARD */
-.card{
-  flex:1;
-  background:#142b52;
-  padding:15px;
-  border-radius:10px;
-}
-
-/* LEFT */
-.income{
-  border-left:5px solid #00ff9d;
-}
-
-/* RIGHT */
-.expense{
-  border-left:5px solid #ff4d4d;
+  margin-top:10px;
 }
 
 /* =========================
-   BOX INPUT
+   MODULE
 ========================= */
-.box{
-  background:#1a335f;
-  padding:10px;
-  border-radius:8px;
-  margin-top:10px;
+.module{
+  background:rgba(255,255,255,0.05);
+  padding:12px;
+  border-radius:14px;
 }
 
 input,select{
   width:100%;
-  margin-top:5px;
-  padding:8px;
-  border:none;
-  border-radius:6px;
-  background:#0f2346;
-  color:#fff;
-  outline:none;
-}
-
-/* =========================
-   BUTTONS
-========================= */
-button{
-  width:100%;
-  margin-top:10px;
+  margin-top:6px;
   padding:10px;
   border:none;
-  border-radius:8px;
-  background:#ff9800;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-/* =========================
-   EVENTS LIST
-========================= */
-#events{
-  margin-top:20px;
-  display:grid;
-  gap:10px;
-}
-
-.event-card{
-  background:#142b52;
-  padding:12px;
   border-radius:10px;
-  border:1px solid rgba(255,255,255,0.1);
+  background:#0f2a52;
+  color:#fff;
+}
+
+button{
+  width:100%;
+  margin-top:8px;
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(90deg,#ff9800,#ffb347);
+  font-weight:bold;
 }
 
 /* =========================
    FILTER
 ========================= */
 .filter{
-  margin-top:15px;
+  margin-top:10px;
+  background:rgba(255,255,255,0.05);
+  padding:12px;
+  border-radius:14px;
   display:grid;
   gap:8px;
-  background:#142b52;
+}
+
+/* =========================
+   LIST
+========================= */
+.item{
+  background:rgba(255,255,255,0.05);
   padding:10px;
-  border-radius:10px;
+  border-radius:12px;
+  margin-top:8px;
+  font-size:12px;
+}
+
+/* =========================
+   PROFIT
+========================= */
+.profit{
+  margin-top:10px;
+  background:rgba(255,255,255,0.05);
+  padding:12px;
+  border-radius:14px;
+}
+
+/* =========================
+   CHART
+========================= */
+.chart{
+  margin-top:10px;
+  background:rgba(255,255,255,0.05);
+  padding:12px;
+  border-radius:14px;
 }
 
 /* =========================
    RESPONSIVE
 ========================= */
-@media(max-width:600px){
-  .kpi-top,
-  .kpi{
-    flex-direction:column;
+@media(max-width:768px){
+  .grid{
+    grid-template-columns:1fr;
   }
 }
 
@@ -161,106 +154,73 @@ button{
 
 <body>
 
-<h2 style="text-align:center;">PPRX FINANCIAL SYSTEM PRO</h2>
-
-<!-- KPI TOP -->
-<div class="kpi-top">
-
-  <div class="kpi-card income-top">
-    <h3>Total Income</h3>
-    <h1 id="totalIncome">₱0</h1>
-  </div>
-
-  <div class="kpi-card expense-top">
-    <h3>Total Expenses</h3>
-    <h1 id="totalExpense">₱0</h1>
-  </div>
-
-  <div class="kpi-card net-top">
-    <h3>Net Income</h3>
-    <h1 id="net">₱0</h1>
-  </div>
-
+<!-- HEADER -->
+<div class="header">
+  PPRX FINANCIAL SYSTEM (LEFT / RIGHT FIXED)
 </div>
 
-<!-- FILTER + EXPORT -->
-<div class="filter">
-
-  <label>From</label>
-  <input type="date" id="fromDate">
-
-  <label>To</label>
-  <input type="date" id="toDate">
-
-  <button onclick="exportExcel()">EXPORT TO EXCEL</button>
-
-</div>
-
-<!-- MAIN -->
+<!-- KPI -->
 <div class="kpi">
 
-  <!-- LEFT INCOME -->
   <div class="card income">
+    INCOME<br>
+    <b id="incomeTotal">₱0</b>
+  </div>
 
-    <h3>Income Module</h3>
+  <div class="card expense">
+    EXPENSE<br>
+    <b id="expenseTotal">₱0</b>
+  </div>
 
-    <div class="box">
-      <input id="event" placeholder="Event Name">
-    </div>
+  <div class="card net">
+    NET<br>
+    <b id="netTotal">₱0</b>
+  </div>
 
-    <div class="box">
-      <label>Event Type</label>
-      <select id="eventType">
-        <option>Corporate Event</option>
-        <option>Wedding</option>
-        <option>Bday / Debut</option>
-        <option>Exhibition & Trade Show</option>
-        <option>Concert & Live Performance</option>
-        <option>Equipment Rental</option>
-      </select>
-    </div>
+</div>
 
-    <div class="box">
-      <input id="rate" type="number" placeholder="Rate">
-    </div>
+<!-- LEFT / RIGHT MODULES -->
+<div class="grid">
 
-    <div class="box">
-      <input type="date" id="date">
-    </div>
+  <!-- LEFT: INCOME -->
+  <div class="module income">
+
+    <h3>INCOME</h3>
+
+    <select id="incomeType">
+      <option>Corporate Event</option>
+      <option>Wedding</option>
+      <option>Birthday</option>
+      <option>Concert</option>
+      <option>Equipment Rental</option>
+    </select>
+
+    <input id="incomeEvent" placeholder="Event Name">
+    <input id="incomeAmount" type="number" placeholder="Amount">
+    <input id="incomeDate" type="date">
 
     <button onclick="addIncome()">ADD INCOME</button>
 
   </div>
 
-  <!-- RIGHT EXPENSE -->
-  <div class="card expense">
+  <!-- RIGHT: EXPENSE -->
+  <div class="module expense">
 
-    <h3>Expense Module</h3>
+    <h3>EXPENSE</h3>
 
-    <div class="box">
-      <label>Category</label>
-      <select id="expenseCategory">
-        <option>Fuel</option>
-        <option>Transport</option>
-        <option>Food</option>
-        <option>Allowance</option>
-        <option>Rentals</option>
-        <option>Utilities</option>
-        <option>Water</option>
-        <option>Electric</option>
-        <option>Internet</option>
-        <option>Permits</option>
-        <option>Insurance</option>
-      </select>
-    </div>
+    <select id="expenseType">
+      <option>Fuel</option>
+      <option>Transport</option>
+      <option>Food</option>
+      <option>Allowance</option>
+      <option>Rentals</option>
+      <option>Utilities</option>
+      <option>Permits</option>
+      <option>Insurance</option>
+    </select>
 
-    <div class="box">
-      <input id="amount" type="number" placeholder="Amount">
-    </div>
-
-    <div class="box">
-      <input type="date" id="dateExpense">
-    </div>
+    <input id="expenseAmount" type="number" placeholder="Amount">
+    <input id="expenseDate" type="date">
 
     <button onclick="addExpense()">ADD EXPENSE</button>
 
@@ -268,33 +228,50 @@ button{
 
 </div>
 
-<!-- EVENTS -->
-<div id="events"></div>
+<!-- FILTER -->
+<div class="filter">
+
+  <input type="date" id="from">
+  <input type="date" id="to">
+  <input id="search" placeholder="Search Event">
+
+  <button onclick="exportExcel()">EXPORT EXCEL</button>
+  <button onclick="clearAll()" style="background:#ff4d4d;">CLEAR ALL</button>
+
+</div>
+
+<!-- PROFIT -->
+<div class="profit">
+  <h3>PER EVENT PROFIT</h3>
+  <div id="profitBox"></div>
+</div>
+
+<!-- REPORT -->
+<div id="report"></div>
+
+<!-- CHART -->
+<div class="chart">
+  <canvas id="chart"></canvas>
+</div>
 
 <script>
 
-let data = [];
-let income = 0;
-let expense = 0;
+let data=[];
+let income=0;
+let expense=0;
+let chart;
 
 /* =========================
    ADD INCOME
 ========================= */
 function addIncome(){
 
-  let e = document.getElementById("event").value;
-  let t = document.getElementById("eventType").value;
-  let r = parseFloat(document.getElementById("rate").value);
-  let d = document.getElementById("date").value;
-
-  if(!e || !r) return;
-
   data.push({
-    type:"income",
-    event:e,
-    category:t,
-    amount:r,
-    date:d
+    type:"Income",
+    category:document.getElementById("incomeType").value,
+    event:document.getElementById("incomeEvent").value,
+    amount:+document.getElementById("incomeAmount").value,
+    date:document.getElementById("incomeDate").value
   });
 
   update();
@@ -305,18 +282,12 @@ function addIncome(){
 ========================= */
 function addExpense(){
 
-  let c = document.getElementById("expenseCategory").value;
-  let a = parseFloat(document.getElementById("amount").value);
-  let d = document.getElementById("dateExpense").value;
-
-  if(!a) return;
-
   data.push({
-    type:"expense",
-    event:c,
-    category:c,
-    amount:a,
-    date:d
+    type:"Expense",
+    category:document.getElementById("expenseType").value,
+    event:document.getElementById("expenseType").value,
+    amount:+document.getElementById("expenseAmount").value,
+    date:document.getElementById("expenseDate").value
   });
 
   update();
@@ -325,16 +296,17 @@ function addExpense(){
 /* =========================
    FILTER
 ========================= */
-function filterData(){
+function filtered(){
 
-  let from = document.getElementById("fromDate").value;
-  let to = document.getElementById("toDate").value;
+  let from=document.getElementById("from").value;
+  let to=document.getElementById("to").value;
+  let search=document.getElementById("search").value.toLowerCase();
 
   return data.filter(d=>{
 
-    if(!d.date) return false;
-    if(from && d.date < from) return false;
-    if(to && d.date > to) return false;
+    if(from && d.date<from) return false;
+    if(to && d.date>to) return false;
+    if(search && !d.event.toLowerCase().includes(search)) return false;
 
     return true;
   });
@@ -342,61 +314,118 @@ function filterData(){
 }
 
 /* =========================
-   UPDATE UI
+   UPDATE
 ========================= */
 function update(){
 
-  let filtered = filterData();
+  let list=filtered();
 
-  income = 0;
-  expense = 0;
+  income=0;
+  expense=0;
 
-  let html = "";
+  let html="";
+  let profit={};
 
-  filtered.forEach(d=>{
+  list.forEach(d=>{
 
-    if(d.type=="income") income += d.amount;
-    else expense += d.amount;
+    if(d.type=="Income") income+=d.amount;
+    else expense+=d.amount;
 
-    html += `
-      <div class="event-card">
-        <b>${d.type.toUpperCase()}</b><br>
-        ${d.event}<br>
-        ₱${d.amount} <br>
-        <small>${d.date || ""}</small>
+    if(!profit[d.event]) profit[d.event]={in:0,ex:0};
+
+    if(d.type=="Income") profit[d.event].in+=d.amount;
+    else profit[d.event].ex+=d.amount;
+
+    html+=`
+      <div class="item">
+        <b>${d.type}</b><br>
+        ${d.category} - ${d.event}<br>
+        ₱${d.amount} | ${d.date}
       </div>
     `;
 
   });
 
-  document.getElementById("totalIncome").innerText = "₱"+income;
-  document.getElementById("totalExpense").innerText = "₱"+expense;
-  document.getElementById("net").innerText = "₱"+(income-expense);
+  document.getElementById("report").innerHTML=html;
 
-  document.getElementById("events").innerHTML = html;
+  document.getElementById("incomeTotal").innerText="₱"+income;
+  document.getElementById("expenseTotal").innerText="₱"+expense;
+  document.getElementById("netTotal").innerText="₱"+(income-expense);
+
+  renderProfit(profit);
+  drawChart();
 
 }
 
 /* =========================
-   EXPORT EXCEL (RANGE)
+   PROFIT
+========================= */
+function renderProfit(p){
+
+  let html="";
+
+  Object.keys(p).forEach(k=>{
+
+    let profit=p[k].in-p[k].ex;
+
+    html+=`
+      <div class="item">
+        <b>${k}</b><br>
+        Profit: ₱${profit}
+      </div>
+    `;
+  });
+
+  document.getElementById("profitBox").innerHTML=html;
+
+}
+
+/* =========================
+   CHART
+========================= */
+function drawChart(){
+
+  if(chart) chart.destroy();
+
+  chart=new Chart(document.getElementById("chart"),{
+    type:"doughnut",
+    data:{
+      labels:["Income","Expense"],
+      datasets:[{data:[income,expense]}]
+    }
+  });
+
+}
+
+/* =========================
+   CLEAR
+========================= */
+function clearAll(){
+  data=[];
+  update();
+}
+
+/* =========================
+   EXPORT
 ========================= */
 function exportExcel(){
 
-  let rows = [["Type","Event","Category","Amount","Date"]];
+  let rows=[["Type","Category","Event","Amount","Date"]];
 
-  let filtered = filterData();
-
-  filtered.forEach(d=>{
-    rows.push([d.type,d.event,d.category,d.amount,d.date]);
+  filtered().forEach(d=>{
+    rows.push([d.type,d.category,d.event,d.amount,d.date]);
   });
 
-  let wb = XLSX.utils.book_new();
-  let ws = XLSX.utils.aoa_to_sheet(rows);
+  let wb=XLSX.utils.book_new();
+  let ws=XLSX.utils.aoa_to_sheet(rows);
 
-  XLSX.utils.book_append_sheet(wb, ws, "PPRX Report");
+  XLSX.utils.book_append_sheet(wb,ws,"Report");
 
-  XLSX.writeFile(wb, "PPRX_Report.xlsx");
+  XLSX.writeFile(wb,"PPRX.xlsx");
+
 }
+
+update();
 
 </script>
 
