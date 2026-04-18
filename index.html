@@ -4,14 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PPRX Event Profit Tracker</title>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<title>PPRX Event Tracker</title>
 
 <style>
 
 /* =========================
-   BASE
+   RESET
 ========================= */
 *{
   margin:0;
@@ -37,26 +35,15 @@ body{
 .logo{
   width:70px;
   height:70px;
-  object-fit:contain;
   margin-bottom:8px;
 }
 
-.top h1{
-  font-size:20px;
-}
-
-.top p{
-  font-size:12px;
-  color:#cfe3ff;
-}
-
 /* =========================
-   KPI
+   KPI (LEFT / RIGHT FIXED)
 ========================= */
 .kpi{
   display:flex;
   gap:10px;
-  margin-top:15px;
 }
 
 .card{
@@ -66,18 +53,23 @@ body{
   border-radius:10px;
 }
 
+/* LEFT */
 .income{
   border-left:5px solid #00ff9d;
 }
 
+/* RIGHT */
 .expense{
   border-left:5px solid #ff4d4d;
 }
 
+/* NET */
 .net{
   margin-top:10px;
   background:#102344;
   text-align:center;
+  padding:15px;
+  border-radius:10px;
 }
 
 /* =========================
@@ -119,23 +111,6 @@ button{
   background:#142b52;
   padding:15px;
   border-radius:10px;
-  border:1px solid rgba(255,255,255,0.1);
-}
-
-/* =========================
-   LIST
-========================= */
-.list{
-  margin-top:15px;
-}
-
-.item{
-  display:flex;
-  justify-content:space-between;
-  padding:10px;
-  background:#13284d;
-  border-radius:8px;
-  margin-top:6px;
 }
 
 </style>
@@ -147,25 +122,25 @@ button{
 <!-- HEADER -->
 <div class="top">
   <img src="logo.png" class="logo">
-  <h1>PPRX EVENT PROFIT TRACKER</h1>
-  <p>Income • Expenses • Per Event Analytics</p>
+  <h1>PPRX EVENT TRACKER</h1>
 </div>
 
-<!-- KPI TOTALS -->
-<section class="kpi">
+<!-- KPI -->
+<div class="kpi">
 
   <div class="card income">
-    <h3>Total Income</h3>
+    <h3>Income</h3>
     <h1 id="income">₱0</h1>
   </div>
 
   <div class="card expense">
-    <h3>Total Expenses</h3>
+    <h3>Expenses</h3>
     <h1 id="expense">₱0</h1>
   </div>
 
-</section>
+</div>
 
+<!-- NET -->
 <div class="card net">
   <h3>Net Income</h3>
   <h1 id="net">₱0</h1>
@@ -174,7 +149,7 @@ button{
 <!-- FORM -->
 <div class="form">
 
-  <input id="event" placeholder="Event Name (Wedding, Concert etc.)">
+  <input id="event" placeholder="Event Name">
   <input id="desc" placeholder="Description">
 
   <select id="type">
@@ -187,15 +162,15 @@ button{
     <option>Rate per Event</option>
     <option>Transport</option>
     <option>Fuel</option>
-    <option>Allowance</option>
     <option>Food</option>
+    <option>Allowance</option>
     <option>Rentals</option>
     <option>Utilities</option>
     <option>Water</option>
-    <option>Electric Bills</option>
-    <option>Telephone / Internet</option>
+    <option>Electric</option>
+    <option>Telephone</option>
     <option>Miscellaneous</option>
-    <option>Repairs & Maintenance</option>
+    <option>Repairs</option>
     <option>Stocks</option>
     <option>Office Supplies</option>
     <option>Spare Parts</option>
@@ -209,14 +184,13 @@ button{
 
 </div>
 
-<!-- EVENT OUTPUT -->
+<!-- EVENTS -->
 <div id="eventList"></div>
 
 <script>
 
 let data = JSON.parse(localStorage.getItem("pprx")) || [];
 
-/* ADD DATA */
 function add(){
 
   let event = document.getElementById("event").value;
@@ -225,7 +199,7 @@ function add(){
   let c = document.getElementById("category").value;
   let a = parseFloat(document.getElementById("amount").value);
 
-  if(!event || !d || !a) return;
+  if(!event || !a) return;
 
   data.push({event,d,t,c,a});
 
@@ -234,12 +208,17 @@ function add(){
   render();
 }
 
-/* GROUP BY EVENT */
-function groupEvents(){
+function render(){
+
+  let income = 0;
+  let expense = 0;
 
   let events = {};
 
   data.forEach(i=>{
+
+    if(i.t === "income") income += i.a;
+    else expense += i.a;
 
     if(!events[i.event]){
       events[i.event] = {income:0, expense:0};
@@ -247,32 +226,16 @@ function groupEvents(){
 
     if(i.t === "income"){
       events[i.event].income += i.a;
-    } else {
+    }else{
       events[i.event].expense += i.a;
     }
 
-  });
-
-  return events;
-}
-
-/* RENDER */
-function render(){
-
-  let income = 0;
-  let expense = 0;
-
-  data.forEach(i=>{
-    if(i.t === "income") income += i.a;
-    else expense += i.a;
   });
 
   document.getElementById("income").innerText = "₱"+income;
   document.getElementById("expense").innerText = "₱"+expense;
   document.getElementById("net").innerText = "₱"+(income-expense);
 
-  /* EVENT CARDS */
-  let events = groupEvents();
   let html = "";
 
   for(let key in events){
