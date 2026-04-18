@@ -27,14 +27,37 @@ body{
 }
 
 /* =========================
-   HEADER
+   HEADER FIXED (LOGO + TITLE)
 ========================= */
 .header{
   background:linear-gradient(135deg,#00c6ff,#0072ff);
   padding:14px;
   border-radius:16px;
-  text-align:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+
+.logo{
+  width:40px;
+  height:40px;
+  border-radius:10px;
+  background:#fff;
+  color:#0072ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   font-weight:bold;
+}
+
+.title{
+  line-height:1.2;
+}
+
+.title small{
+  font-size:11px;
+  opacity:0.8;
 }
 
 /* =========================
@@ -59,7 +82,7 @@ body{
 .net{border-left:4px solid #ffb300;}
 
 /* =========================
-   MAIN LEFT / RIGHT
+   LEFT RIGHT MODULE
 ========================= */
 .grid{
   display:grid;
@@ -68,15 +91,15 @@ body{
   margin-top:10px;
 }
 
-/* =========================
-   MODULE
-========================= */
 .module{
   background:rgba(255,255,255,0.05);
   padding:12px;
   border-radius:14px;
 }
 
+/* =========================
+   INPUTS
+========================= */
 input,select{
   width:100%;
   margin-top:6px;
@@ -154,9 +177,16 @@ button{
 
 <body>
 
-<!-- HEADER -->
+<!-- HEADER FIXED -->
 <div class="header">
-  PPRX FINANCIAL SYSTEM (LEFT / RIGHT FIXED)
+
+  <div class="logo">P</div>
+
+  <div class="title">
+    <small>PPRX</small><br>
+    Financial Tracking System
+  </div>
+
 </div>
 
 <!-- KPI -->
@@ -179,10 +209,10 @@ button{
 
 </div>
 
-<!-- LEFT / RIGHT MODULES -->
+<!-- LEFT RIGHT -->
 <div class="grid">
 
-  <!-- LEFT: INCOME -->
+  <!-- INCOME -->
   <div class="module income">
 
     <h3>INCOME</h3>
@@ -203,7 +233,7 @@ button{
 
   </div>
 
-  <!-- RIGHT: EXPENSE -->
+  <!-- EXPENSE -->
   <div class="module expense">
 
     <h3>EXPENSE</h3>
@@ -219,6 +249,8 @@ button{
       <option>Insurance</option>
     </select>
 
+    <!-- FIX: NOTES ADDED -->
+    <input id="expenseNotes" placeholder="Notes / Description">
     <input id="expenseAmount" type="number" placeholder="Amount">
     <input id="expenseDate" type="date">
 
@@ -262,9 +294,11 @@ let expense=0;
 let chart;
 
 /* =========================
-   ADD INCOME
+   FIXED INCOME
 ========================= */
 function addIncome(){
+
+  if(!document.getElementById("incomeAmount").value) return;
 
   data.push({
     type:"Income",
@@ -278,14 +312,16 @@ function addIncome(){
 }
 
 /* =========================
-   ADD EXPENSE
+   FIXED EXPENSE (WITH NOTES)
 ========================= */
 function addExpense(){
+
+  if(!document.getElementById("expenseAmount").value) return;
 
   data.push({
     type:"Expense",
     category:document.getElementById("expenseType").value,
-    event:document.getElementById("expenseType").value,
+    event:document.getElementById("expenseNotes").value || document.getElementById("expenseType").value,
     amount:+document.getElementById("expenseAmount").value,
     date:document.getElementById("expenseDate").value
   });
@@ -343,7 +379,6 @@ function update(){
         ₱${d.amount} | ${d.date}
       </div>
     `;
-
   });
 
   document.getElementById("report").innerHTML=html;
