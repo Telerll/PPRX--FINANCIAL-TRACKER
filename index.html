@@ -11,7 +11,7 @@
 <style>
 
 /* =========================
-   BASE
+   BASE (GLASS BACKGROUND UPGRADE)
 ========================= */
 *{
   margin:0;
@@ -21,13 +21,13 @@
 }
 
 body{
-  background:#071a33;
+  background: radial-gradient(circle at top,#0b1f3a,#071a33,#050814);
   color:#fff;
   padding:12px;
 }
 
 /* =========================
-   HEADER FIXED (LOGO + TITLE)
+   HEADER (GLASS FINTECH)
 ========================= */
 .header{
   background:linear-gradient(135deg,#00c6ff,#0072ff);
@@ -37,18 +37,20 @@ body{
   align-items:center;
   justify-content:center;
   gap:10px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
 }
 
 .logo{
-  width:40px;
-  height:40px;
-  border-radius:10px;
-  background:#fff;
-  color:#0072ff;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(10px);
   display:flex;
   align-items:center;
   justify-content:center;
   font-weight:bold;
+  border:1px solid rgba(255,255,255,0.3);
 }
 
 .title{
@@ -61,7 +63,7 @@ body{
 }
 
 /* =========================
-   KPI
+   KPI (GLASS CARDS)
 ========================= */
 .kpi{
   display:grid;
@@ -72,9 +74,17 @@ body{
 
 .card{
   background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(10px);
   padding:12px;
   border-radius:14px;
   text-align:center;
+  transition:0.25s;
+  border:1px solid rgba(255,255,255,0.1);
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  background:rgba(255,255,255,0.1);
 }
 
 .income{border-left:4px solid #00ff9d;}
@@ -93,8 +103,15 @@ body{
 
 .module{
   background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(12px);
   padding:12px;
   border-radius:14px;
+  border:1px solid rgba(255,255,255,0.08);
+  transition:0.2s;
+}
+
+.module:hover{
+  transform:translateY(-3px);
 }
 
 /* =========================
@@ -108,8 +125,16 @@ input,select{
   border-radius:10px;
   background:#0f2a52;
   color:#fff;
+  outline:none;
 }
 
+input:focus,select:focus{
+  box-shadow:0 0 8px rgba(0,198,255,0.5);
+}
+
+/* =========================
+   BUTTON
+========================= */
 button{
   width:100%;
   margin-top:8px;
@@ -118,6 +143,7 @@ button{
   border-radius:10px;
   background:linear-gradient(90deg,#ff9800,#ffb347);
   font-weight:bold;
+  cursor:pointer;
 }
 
 /* =========================
@@ -130,6 +156,7 @@ button{
   border-radius:14px;
   display:grid;
   gap:8px;
+  backdrop-filter:blur(10px);
 }
 
 /* =========================
@@ -141,6 +168,12 @@ button{
   border-radius:12px;
   margin-top:8px;
   font-size:12px;
+  transition:0.2s;
+}
+
+.item:hover{
+  transform:translateX(4px);
+  background:rgba(255,255,255,0.1);
 }
 
 /* =========================
@@ -177,7 +210,7 @@ button{
 
 <body>
 
-<!-- HEADER FIXED -->
+<!-- HEADER -->
 <div class="header">
 
   <div class="logo">P</div>
@@ -191,30 +224,16 @@ button{
 
 <!-- KPI -->
 <div class="kpi">
-
-  <div class="card income">
-    INCOME<br>
-    <b id="incomeTotal">₱0</b>
-  </div>
-
-  <div class="card expense">
-    EXPENSE<br>
-    <b id="expenseTotal">₱0</b>
-  </div>
-
-  <div class="card net">
-    NET<br>
-    <b id="netTotal">₱0</b>
-  </div>
-
+  <div class="card income">INCOME<br><b id="incomeTotal">₱0</b></div>
+  <div class="card expense">EXPENSE<br><b id="expenseTotal">₱0</b></div>
+  <div class="card net">NET<br><b id="netTotal">₱0</b></div>
 </div>
 
-<!-- LEFT RIGHT -->
+<!-- GRID -->
 <div class="grid">
 
   <!-- INCOME -->
   <div class="module income">
-
     <h3>INCOME</h3>
 
     <select id="incomeType">
@@ -230,12 +249,10 @@ button{
     <input id="incomeDate" type="date">
 
     <button onclick="addIncome()">ADD INCOME</button>
-
   </div>
 
   <!-- EXPENSE -->
   <div class="module expense">
-
     <h3>EXPENSE</h3>
 
     <select id="expenseType">
@@ -249,27 +266,23 @@ button{
       <option>Insurance</option>
     </select>
 
-    <!-- FIX: NOTES ADDED -->
     <input id="expenseNotes" placeholder="Notes / Description">
     <input id="expenseAmount" type="number" placeholder="Amount">
     <input id="expenseDate" type="date">
 
     <button onclick="addExpense()">ADD EXPENSE</button>
-
   </div>
 
 </div>
 
 <!-- FILTER -->
 <div class="filter">
-
   <input type="date" id="from">
   <input type="date" id="to">
   <input id="search" placeholder="Search Event">
 
   <button onclick="exportExcel()">EXPORT EXCEL</button>
   <button onclick="clearAll()" style="background:#ff4d4d;">CLEAR ALL</button>
-
 </div>
 
 <!-- PROFIT -->
@@ -293,171 +306,111 @@ let income=0;
 let expense=0;
 let chart;
 
-/* =========================
-   FIXED INCOME
-========================= */
+/* ADD INCOME */
 function addIncome(){
-
-  if(!document.getElementById("incomeAmount").value) return;
+  if(!incomeAmount.value) return;
 
   data.push({
     type:"Income",
-    category:document.getElementById("incomeType").value,
-    event:document.getElementById("incomeEvent").value,
-    amount:+document.getElementById("incomeAmount").value,
-    date:document.getElementById("incomeDate").value
+    category:incomeType.value,
+    event:incomeEvent.value,
+    amount:+incomeAmount.value,
+    date:incomeDate.value
   });
 
   update();
 }
 
-/* =========================
-   FIXED EXPENSE (WITH NOTES)
-========================= */
+/* ADD EXPENSE */
 function addExpense(){
-
-  if(!document.getElementById("expenseAmount").value) return;
+  if(!expenseAmount.value) return;
 
   data.push({
     type:"Expense",
-    category:document.getElementById("expenseType").value,
-    event:document.getElementById("expenseNotes").value || document.getElementById("expenseType").value,
-    amount:+document.getElementById("expenseAmount").value,
-    date:document.getElementById("expenseDate").value
+    category:expenseType.value,
+    event:expenseNotes.value || expenseType.value,
+    amount:+expenseAmount.value,
+    date:expenseDate.value
   });
 
   update();
 }
 
-/* =========================
-   FILTER
-========================= */
+/* FILTER */
 function filtered(){
-
   let from=document.getElementById("from").value;
   let to=document.getElementById("to").value;
   let search=document.getElementById("search").value.toLowerCase();
 
   return data.filter(d=>{
-
     if(from && d.date<from) return false;
     if(to && d.date>to) return false;
     if(search && !d.event.toLowerCase().includes(search)) return false;
-
     return true;
   });
-
 }
 
-/* =========================
-   UPDATE
-========================= */
+/* UPDATE */
 function update(){
 
   let list=filtered();
-
-  income=0;
-  expense=0;
+  income=0; expense=0;
 
   let html="";
   let profit={};
 
   list.forEach(d=>{
 
-    if(d.type=="Income") income+=d.amount;
-    else expense+=d.amount;
+    d.type=="Income" ? income+=d.amount : expense+=d.amount;
 
     if(!profit[d.event]) profit[d.event]={in:0,ex:0};
 
-    if(d.type=="Income") profit[d.event].in+=d.amount;
-    else profit[d.event].ex+=d.amount;
+    d.type=="Income" ? profit[d.event].in+=d.amount : profit[d.event].ex+=d.amount;
 
-    html+=`
-      <div class="item">
-        <b>${d.type}</b><br>
-        ${d.category} - ${d.event}<br>
-        ₱${d.amount} | ${d.date}
-      </div>
-    `;
+    html+=`<div class="item"><b>${d.type}</b><br>${d.category} - ${d.event}<br>₱${d.amount} | ${d.date}</div>`;
   });
 
-  document.getElementById("report").innerHTML=html;
+  report.innerHTML=html;
 
-  document.getElementById("incomeTotal").innerText="₱"+income;
-  document.getElementById("expenseTotal").innerText="₱"+expense;
-  document.getElementById("netTotal").innerText="₱"+(income-expense);
+  incomeTotal.innerText="₱"+income;
+  expenseTotal.innerText="₱"+expense;
+  netTotal.innerText="₱"+(income-expense);
 
   renderProfit(profit);
   drawChart();
-
 }
 
-/* =========================
-   PROFIT
-========================= */
+/* PROFIT */
 function renderProfit(p){
-
   let html="";
-
   Object.keys(p).forEach(k=>{
-
-    let profit=p[k].in-p[k].ex;
-
-    html+=`
-      <div class="item">
-        <b>${k}</b><br>
-        Profit: ₱${profit}
-      </div>
-    `;
+    html+=`<div class="item"><b>${k}</b><br>Profit: ₱${p[k].in-p[k].ex}</div>`;
   });
-
-  document.getElementById("profitBox").innerHTML=html;
-
+  profitBox.innerHTML=html;
 }
 
-/* =========================
-   CHART
-========================= */
+/* CHART */
 function drawChart(){
-
   if(chart) chart.destroy();
 
-  chart=new Chart(document.getElementById("chart"),{
+  chart=new Chart(chartCanvas,{
     type:"doughnut",
-    data:{
-      labels:["Income","Expense"],
-      datasets:[{data:[income,expense]}]
-    }
+    data:{labels:["Income","Expense"],datasets:[{data:[income,expense]}]}
   });
-
 }
 
-/* =========================
-   CLEAR
-========================= */
-function clearAll(){
-  data=[];
-  update();
-}
+/* CLEAR */
+function clearAll(){ data=[]; update(); }
 
-/* =========================
-   EXPORT
-========================= */
+/* EXPORT */
 function exportExcel(){
-
   let rows=[["Type","Category","Event","Amount","Date"]];
-
-  filtered().forEach(d=>{
-    rows.push([d.type,d.category,d.event,d.amount,d.date]);
-  });
+  filtered().forEach(d=>rows.push([d.type,d.category,d.event,d.amount,d.date]));
 
   let wb=XLSX.utils.book_new();
   let ws=XLSX.utils.aoa_to_sheet(rows);
-
   XLSX.utils.book_append_sheet(wb,ws,"Report");
-
   XLSX.writeFile(wb,"PPRX.xlsx");
-
 }
 
 update();
