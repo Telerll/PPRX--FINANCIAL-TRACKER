@@ -44,24 +44,7 @@ body{
 }
 
 /* =========================
-   CARD BASE (GLASS EFFECT)
-========================= */
-.card{
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:16px;
-  padding:16px;
-  backdrop-filter:blur(12px);
-  transition:0.3s ease;
-}
-
-.card:hover{
-  transform:translateY(-6px);
-  border-color:rgba(255,165,0,0.35);
-}
-
-/* =========================
-   KPI LAYOUT (INCOME / EXPENSE)
+   KPI GRID (IMPORTANT FIX)
 ========================= */
 .kpi-two{
   display:grid;
@@ -70,19 +53,50 @@ body{
   margin-top:20px;
 }
 
-/* Income highlight */
+/* CARD BASE */
+.card{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:16px;
+  padding:16px;
+  backdrop-filter:blur(12px);
+  transition:0.3s ease;
+
+  /* FIX: prevents stretching */
+  min-height:110px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+/* HOVER */
+.card:hover{
+  transform:translateY(-6px);
+  border-color:rgba(255,165,0,0.35);
+}
+
+/* INCOME CARD */
 .income{
-  border-color:rgba(0,255,150,0.35);
+  border-color:rgba(0,255,150,0.45);
 }
 
-/* Expense highlight */
+/* EXPENSE CARD */
 .expense{
-  border-color:rgba(255,80,80,0.45);
+  border-color:rgba(255,80,80,0.5);
 }
 
-/* Net card spacing */
+/* =========================
+   NET CARD (SEPARATE FIX)
+========================= */
 .net-card{
   margin-top:12px;
+}
+
+.net-card .card{
+  text-align:center;
+  min-height:90px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.1);
 }
 
 /* =========================
@@ -103,18 +117,16 @@ input,select,button{
   font-size:14px;
 }
 
-/* Inputs */
 input,select{
   background:rgba(255,255,255,0.08);
   color:#fff;
 }
 
-/* Dropdown text fix */
 option{
   color:#000;
 }
 
-/* Button */
+/* BUTTON */
 button{
   background:linear-gradient(90deg,#ff9800,#ffb347);
   font-weight:bold;
@@ -128,7 +140,7 @@ button:hover{
 }
 
 /* =========================
-   LIST ITEMS
+   LIST
 ========================= */
 .list{
   margin-top:20px;
@@ -151,7 +163,7 @@ button:hover{
 }
 
 /* =========================
-   CHART BOX
+   CHART
 ========================= */
 .chartBox{
   margin-top:30px;
@@ -162,7 +174,7 @@ button:hover{
 }
 
 /* =========================
-   MOBILE RESPONSIVE FIX
+   MOBILE FIX
 ========================= */
 @media(max-width:600px){
   .kpi-two{
