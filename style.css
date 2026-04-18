@@ -5,86 +5,84 @@
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family: Arial, sans-serif;
+  font-family:Arial, sans-serif;
 }
 
 body{
-  min-height:100vh;
-  background: radial-gradient(circle at top, rgba(0,140,255,0.25), transparent 40%),
-              linear-gradient(135deg,#06142e,#0b2a5a,#06142e);
+  background:linear-gradient(135deg,#06142e,#0b2a5a,#06142e);
   color:#fff;
+  min-height:100vh;
   padding:20px;
-  overflow-x:hidden;
 }
 
 /* =========================
-   HEADER
+   HEADER (LOGO TOP)
 ========================= */
-header{
+.top{
   text-align:center;
-  margin-bottom:25px;
+  margin-bottom:20px;
 }
 
-header h1{
-  font-size:28px;
-  letter-spacing:1px;
+.logo{
+  width:85px;
+  height:85px;
+  object-fit:contain;
+  margin-bottom:10px;
+  filter:drop-shadow(0 0 12px rgba(255,255,255,0.25));
+}
+
+.top h1{
+  font-size:24px;
+  letter-spacing:2px;
   text-transform:uppercase;
 }
 
-header p{
-  font-size:14px;
+.top p{
   color:#cfe3ff;
-  margin-top:5px;
+  font-size:13px;
+  margin-top:4px;
 }
 
 /* =========================
-   KPI CARDS
+   CARD BASE (GLASS EFFECT)
 ========================= */
-.kpi{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:14px;
-  margin-top:20px;
-}
-
 .card{
-  position:relative;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius:18px;
-  padding:18px;
-  backdrop-filter: blur(14px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:16px;
+  padding:16px;
+  backdrop-filter:blur(12px);
   transition:0.3s ease;
-  overflow:hidden;
-}
-
-/* orange glow line */
-.card::before{
-  content:"";
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:3px;
-  background:linear-gradient(90deg,#ff9800,#ffb347,transparent);
 }
 
 .card:hover{
-  transform:translateY(-8px) scale(1.02);
-  border-color:rgba(255,165,0,0.4);
-  box-shadow:0 18px 50px rgba(0,0,0,0.4);
+  transform:translateY(-6px);
+  border-color:rgba(255,165,0,0.35);
 }
 
-.card h3{
-  font-size:13px;
-  color:#cfe3ff;
-  letter-spacing:0.5px;
+/* =========================
+   KPI LAYOUT (INCOME / EXPENSE)
+========================= */
+.kpi-two{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:20px;
 }
 
-.card h1{
-  font-size:22px;
-  margin-top:10px;
+/* Income highlight */
+.income{
+  border-color:rgba(0,255,150,0.35);
+}
+
+/* Expense highlight */
+.expense{
+  border-color:rgba(255,80,80,0.45);
+}
+
+/* Net card spacing */
+.net-card{
+  margin-top:12px;
 }
 
 /* =========================
@@ -93,72 +91,63 @@ header p{
 .form{
   margin-top:25px;
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:12px;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:10px;
 }
 
-input,select{
-  padding:12px;
-  border-radius:12px;
+input,select,button{
+  padding:10px;
   border:none;
+  border-radius:10px;
   outline:none;
-  background: rgba(255,255,255,0.08);
+  font-size:14px;
+}
+
+/* Inputs */
+input,select{
+  background:rgba(255,255,255,0.08);
   color:#fff;
-  backdrop-filter: blur(10px);
-  transition:0.3s;
 }
 
-input:focus,select:focus{
-  border:1px solid rgba(255,165,0,0.5);
-  transform:scale(1.02);
-}
-
+/* Dropdown text fix */
 option{
   color:#000;
 }
 
-/* =========================
-   BUTTON
-========================= */
+/* Button */
 button{
-  padding:12px;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
+  background:linear-gradient(90deg,#ff9800,#ffb347);
   font-weight:bold;
-  background: linear-gradient(90deg,#ff9800,#ffb347);
-  color:#fff;
+  cursor:pointer;
   transition:0.3s;
-  box-shadow:0 8px 20px rgba(255,140,0,0.25);
 }
 
 button:hover{
   transform:scale(1.05);
-  box-shadow:0 12px 30px rgba(255,140,0,0.35);
+  box-shadow:0 0 12px rgba(255,165,0,0.4);
 }
 
 /* =========================
    LIST ITEMS
 ========================= */
 .list{
-  margin-top:25px;
+  margin-top:20px;
 }
 
 .item{
   display:flex;
   justify-content:space-between;
-  align-items:center;
-  padding:12px 14px;
-  margin-top:10px;
-  border-radius:12px;
-  background: rgba(255,255,255,0.05);
+  padding:12px;
+  background:rgba(255,255,255,0.05);
+  border-radius:10px;
+  margin-top:8px;
   border:1px solid rgba(255,255,255,0.08);
-  transition:0.3s;
+  transition:0.2s;
 }
 
 .item:hover{
-  transform:translateX(6px);
-  border-color:rgba(255,165,0,0.3);
+  transform:scale(1.02);
+  border-color:rgba(255,255,255,0.2);
 }
 
 /* =========================
@@ -166,24 +155,21 @@ button:hover{
 ========================= */
 .chartBox{
   margin-top:30px;
+  background:rgba(255,255,255,0.05);
   padding:20px;
-  border-radius:18px;
-  background: rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.08);
-  backdrop-filter: blur(12px);
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.1);
 }
 
 /* =========================
-   RESPONSIVE
+   MOBILE RESPONSIVE FIX
 ========================= */
-@media (max-width:600px){
-
-  header h1{
-    font-size:22px;
+@media(max-width:600px){
+  .kpi-two{
+    grid-template-columns:1fr;
   }
 
-  .card h1{
-    font-size:18px;
+  .top h1{
+    font-size:20px;
   }
-
 }
