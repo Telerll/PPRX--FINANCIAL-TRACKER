@@ -9,62 +9,33 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
-
 /* =========================
-   BASE (GLASS BACKGROUND UPGRADE)
+   BASE
 ========================= */
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:radial-gradient(circle at top,#0b1f3a,#071a33,#050814);color:#fff;padding:12px;}
 
-body{
-  background: radial-gradient(circle at top,#0b1f3a,#071a33,#050814);
-  color:#fff;
-  padding:12px;
-}
-
-/* =========================
-   HEADER (GLASS FINTECH)
-========================= */
+/* HEADER */
 .header{
   background:linear-gradient(135deg,#00c6ff,#0072ff);
   padding:14px;
   border-radius:16px;
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   gap:10px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.3);
 }
 
 .logo{
-  width:42px;
-  height:42px;
-  border-radius:50%;
+  width:42px;height:42px;border-radius:50%;
   background:rgba(255,255,255,0.15);
-  backdrop-filter:blur(10px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display:flex;align-items:center;justify-content:center;
   font-weight:bold;
+  backdrop-filter:blur(10px);
   border:1px solid rgba(255,255,255,0.3);
 }
 
-.title{
-  line-height:1.2;
-}
-
-.title small{
-  font-size:11px;
-  opacity:0.8;
-}
-
-/* =========================
-   KPI (GLASS CARDS)
-========================= */
+/* KPI */
 .kpi{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -74,26 +45,13 @@ body{
 
 .card{
   background:rgba(255,255,255,0.06);
-  backdrop-filter:blur(10px);
   padding:12px;
   border-radius:14px;
   text-align:center;
-  transition:0.25s;
-  border:1px solid rgba(255,255,255,0.1);
+  backdrop-filter:blur(10px);
 }
 
-.card:hover{
-  transform:translateY(-4px);
-  background:rgba(255,255,255,0.1);
-}
-
-.income{border-left:4px solid #00ff9d;}
-.expense{border-left:4px solid #ff4d4d;}
-.net{border-left:4px solid #ffb300;}
-
-/* =========================
-   LEFT RIGHT MODULE
-========================= */
+/* GRID */
 .grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -103,38 +61,23 @@ body{
 
 .module{
   background:rgba(255,255,255,0.05);
-  backdrop-filter:blur(12px);
   padding:12px;
   border-radius:14px;
-  border:1px solid rgba(255,255,255,0.08);
-  transition:0.2s;
+  backdrop-filter:blur(12px);
 }
 
-.module:hover{
-  transform:translateY(-3px);
-}
-
-/* =========================
-   INPUTS
-========================= */
+/* INPUT */
 input,select{
   width:100%;
   margin-top:6px;
   padding:10px;
-  border:none;
   border-radius:10px;
+  border:none;
   background:#0f2a52;
   color:#fff;
-  outline:none;
 }
 
-input:focus,select:focus{
-  box-shadow:0 0 8px rgba(0,198,255,0.5);
-}
-
-/* =========================
-   BUTTON
-========================= */
+/* BUTTON */
 button{
   width:100%;
   margin-top:8px;
@@ -143,99 +86,76 @@ button{
   border-radius:10px;
   background:linear-gradient(90deg,#ff9800,#ffb347);
   font-weight:bold;
-  cursor:pointer;
 }
 
-/* =========================
-   FILTER
-========================= */
-.filter{
-  margin-top:10px;
+/* REPORT SPLIT */
+.report-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+
+.report-box{
   background:rgba(255,255,255,0.05);
   padding:12px;
   border-radius:14px;
-  display:grid;
-  gap:8px;
-  backdrop-filter:blur(10px);
+  min-height:150px;
 }
 
-/* =========================
-   LIST
-========================= */
+/* ITEMS */
 .item{
   background:rgba(255,255,255,0.05);
   padding:10px;
-  border-radius:12px;
   margin-top:8px;
+  border-radius:10px;
   font-size:12px;
-  transition:0.2s;
 }
 
-.item:hover{
-  transform:translateX(4px);
-  background:rgba(255,255,255,0.1);
-}
-
-/* =========================
-   PROFIT
-========================= */
-.profit{
+/* FILTER */
+.filter{
   margin-top:10px;
-  background:rgba(255,255,255,0.05);
   padding:12px;
+  background:rgba(255,255,255,0.05);
   border-radius:14px;
+  display:grid;
+  gap:8px;
 }
 
-/* =========================
-   CHART
-========================= */
+/* CHART */
 .chart{
   margin-top:10px;
-  background:rgba(255,255,255,0.05);
   padding:12px;
+  background:rgba(255,255,255,0.05);
   border-radius:14px;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* RESPONSIVE */
 @media(max-width:768px){
-  .grid{
-    grid-template-columns:1fr;
-  }
+  .grid,.report-grid{grid-template-columns:1fr;}
 }
-
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div class="header">
-
   <div class="logo">P</div>
-
-  <div class="title">
-    <small>PPRX</small><br>
-    Financial Tracking System
-  </div>
-
+  <div>PPRX Financial System</div>
 </div>
 
 <!-- KPI -->
 <div class="kpi">
-  <div class="card income">INCOME<br><b id="incomeTotal">₱0</b></div>
-  <div class="card expense">EXPENSE<br><b id="expenseTotal">₱0</b></div>
-  <div class="card net">NET<br><b id="netTotal">₱0</b></div>
+  <div class="card">INCOME<br><b id="incomeTotal">₱0</b></div>
+  <div class="card">EXPENSE<br><b id="expenseTotal">₱0</b></div>
+  <div class="card">NET<br><b id="netTotal">₱0</b></div>
 </div>
 
-<!-- GRID -->
+<!-- INPUT -->
 <div class="grid">
 
-  <!-- INCOME -->
-  <div class="module income">
+  <div class="module">
     <h3>INCOME</h3>
-
     <select id="incomeType">
       <option>Corporate Event</option>
       <option>Wedding</option>
@@ -251,10 +171,8 @@ button{
     <button onclick="addIncome()">ADD INCOME</button>
   </div>
 
-  <!-- EXPENSE -->
-  <div class="module expense">
+  <div class="module">
     <h3>EXPENSE</h3>
-
     <select id="expenseType">
       <option>Fuel</option>
       <option>Transport</option>
@@ -266,7 +184,7 @@ button{
       <option>Insurance</option>
     </select>
 
-    <input id="expenseNotes" placeholder="Notes / Description">
+    <input id="expenseNotes" placeholder="Notes">
     <input id="expenseAmount" type="number" placeholder="Amount">
     <input id="expenseDate" type="date">
 
@@ -280,23 +198,28 @@ button{
   <input type="date" id="from">
   <input type="date" id="to">
   <input id="search" placeholder="Search Event">
-
-  <button onclick="exportExcel()">EXPORT EXCEL</button>
-  <button onclick="clearAll()" style="background:#ff4d4d;">CLEAR ALL</button>
+  <button onclick="exportExcel()">EXPORT</button>
+  <button onclick="clearAll()">CLEAR ALL</button>
 </div>
 
-<!-- PROFIT -->
-<div class="profit">
-  <h3>PER EVENT PROFIT</h3>
-  <div id="profitBox"></div>
-</div>
+<!-- REPORT SPLIT -->
+<div class="report-grid">
 
-<!-- REPORT -->
-<div id="report"></div>
+  <div class="report-box">
+    <h3>INCOME</h3>
+    <div id="incomeReport"></div>
+  </div>
+
+  <div class="report-box">
+    <h3>EXPENSE</h3>
+    <div id="expenseReport"></div>
+  </div>
+
+</div>
 
 <!-- CHART -->
 <div class="chart">
-  <canvas id="chart"></canvas>
+  <canvas id="chartCanvas"></canvas>
 </div>
 
 <script>
@@ -308,8 +231,6 @@ let chart;
 
 /* ADD INCOME */
 function addIncome(){
-  if(!incomeAmount.value) return;
-
   data.push({
     type:"Income",
     category:incomeType.value,
@@ -318,13 +239,15 @@ function addIncome(){
     date:incomeDate.value
   });
 
+  incomeEvent.value="";
+  incomeAmount.value="";
+  incomeDate.value="";
+
   update();
 }
 
 /* ADD EXPENSE */
 function addExpense(){
-  if(!expenseAmount.value) return;
-
   data.push({
     type:"Expense",
     category:expenseType.value,
@@ -332,6 +255,10 @@ function addExpense(){
     amount:+expenseAmount.value,
     date:expenseDate.value
   });
+
+  expenseNotes.value="";
+  expenseAmount.value="";
+  expenseDate.value="";
 
   update();
 }
@@ -356,37 +283,35 @@ function update(){
   let list=filtered();
   income=0; expense=0;
 
-  let html="";
+  let incomeHTML="";
+  let expenseHTML="";
   let profit={};
 
   list.forEach(d=>{
 
-    d.type=="Income" ? income+=d.amount : expense+=d.amount;
+    if(d.type=="Income"){
+      income+=d.amount;
+      incomeHTML+=`<div class="item">${d.category}<br>${d.event}<br>₱${d.amount}</div>`;
+    }
+
+    if(d.type=="Expense"){
+      expense+=d.amount;
+      expenseHTML+=`<div class="item">${d.category}<br>${d.event}<br>₱${d.amount}</div>`;
+    }
 
     if(!profit[d.event]) profit[d.event]={in:0,ex:0};
 
     d.type=="Income" ? profit[d.event].in+=d.amount : profit[d.event].ex+=d.amount;
-
-    html+=`<div class="item"><b>${d.type}</b><br>${d.category} - ${d.event}<br>₱${d.amount} | ${d.date}</div>`;
   });
 
-  report.innerHTML=html;
+  incomeReport.innerHTML=incomeHTML;
+  expenseReport.innerHTML=expenseHTML;
 
   incomeTotal.innerText="₱"+income;
   expenseTotal.innerText="₱"+expense;
   netTotal.innerText="₱"+(income-expense);
 
-  renderProfit(profit);
   drawChart();
-}
-
-/* PROFIT */
-function renderProfit(p){
-  let html="";
-  Object.keys(p).forEach(k=>{
-    html+=`<div class="item"><b>${k}</b><br>Profit: ₱${p[k].in-p[k].ex}</div>`;
-  });
-  profitBox.innerHTML=html;
 }
 
 /* CHART */
@@ -395,12 +320,18 @@ function drawChart(){
 
   chart=new Chart(chartCanvas,{
     type:"doughnut",
-    data:{labels:["Income","Expense"],datasets:[{data:[income,expense]}]}
+    data:{
+      labels:["Income","Expense"],
+      datasets:[{data:[income,expense]}]
+    }
   });
 }
 
 /* CLEAR */
-function clearAll(){ data=[]; update(); }
+function clearAll(){
+  data=[];
+  update();
+}
 
 /* EXPORT */
 function exportExcel(){
