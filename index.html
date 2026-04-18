@@ -9,11 +9,17 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
+
 /* =========================
    BASE
 ========================= */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
-body{background:radial-gradient(circle at top,#0b1f3a,#071a33,#050814);color:#fff;padding:12px;}
+
+body{
+  background:radial-gradient(circle at top,#0b1f3a,#071a33,#050814);
+  color:#fff;
+  padding:12px;
+}
 
 /* HEADER */
 .header{
@@ -32,7 +38,6 @@ body{background:radial-gradient(circle at top,#0b1f3a,#071a33,#050814);color:#ff
   display:flex;align-items:center;justify-content:center;
   font-weight:bold;
   backdrop-filter:blur(10px);
-  border:1px solid rgba(255,255,255,0.3);
 }
 
 /* KPI */
@@ -48,7 +53,6 @@ body{background:radial-gradient(circle at top,#0b1f3a,#071a33,#050814);color:#ff
   padding:12px;
   border-radius:14px;
   text-align:center;
-  backdrop-filter:blur(10px);
 }
 
 /* GRID */
@@ -63,7 +67,6 @@ body{background:radial-gradient(circle at top,#0b1f3a,#071a33,#050814);color:#ff
   background:rgba(255,255,255,0.05);
   padding:12px;
   border-radius:14px;
-  backdrop-filter:blur(12px);
 }
 
 /* INPUT */
@@ -88,7 +91,7 @@ button{
   font-weight:bold;
 }
 
-/* REPORT SPLIT */
+/* REPORT */
 .report-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -100,10 +103,10 @@ button{
   background:rgba(255,255,255,0.05);
   padding:12px;
   border-radius:14px;
-  min-height:150px;
+  min-height:160px;
 }
 
-/* ITEMS */
+/* ITEM */
 .item{
   background:rgba(255,255,255,0.05);
   padding:10px;
@@ -134,6 +137,7 @@ button{
 @media(max-width:768px){
   .grid,.report-grid{grid-template-columns:1fr;}
 }
+
 </style>
 </head>
 
@@ -154,9 +158,12 @@ button{
 <!-- INPUT -->
 <div class="grid">
 
+  <!-- INCOME -->
   <div class="module">
     <h3>INCOME</h3>
+
     <select id="incomeType">
+      <option selected disabled>Select Income Type</option>
       <option>Corporate Event</option>
       <option>Wedding</option>
       <option>Birthday</option>
@@ -171,17 +178,41 @@ button{
     <button onclick="addIncome()">ADD INCOME</button>
   </div>
 
+  <!-- EXPENSE -->
   <div class="module">
     <h3>EXPENSE</h3>
+
     <select id="expenseType">
-      <option>Fuel</option>
-      <option>Transport</option>
-      <option>Food</option>
-      <option>Allowance</option>
-      <option>Rentals</option>
-      <option>Utilities</option>
-      <option>Permits</option>
-      <option>Insurance</option>
+
+      <option selected disabled>Select Expense Type</option>
+
+      <optgroup label="🚗 Operations">
+        <option>Fuel</option>
+        <option>Transport</option>
+        <option>Food</option>
+        <option>Rentals</option>
+        <option>Utilities</option>
+        <option>Permits</option>
+        <option>Insurance</option>
+      </optgroup>
+
+      <optgroup label="🛠 Maintenance">
+        <option>Spare Parts</option>
+        <option>Repairs & Preventive Maintenance</option>
+      </optgroup>
+
+      <optgroup label="🏢 Office">
+        <option>Office Supplies</option>
+        <option>Miscellaneous</option>
+      </optgroup>
+
+      <optgroup label="👥 Payroll">
+        <option>Salary</option>
+        <option>Allowances</option>
+        <option>Compensations</option>
+        <option>Benefits</option>
+      </optgroup>
+
     </select>
 
     <input id="expenseNotes" placeholder="Notes">
@@ -202,7 +233,7 @@ button{
   <button onclick="clearAll()">CLEAR ALL</button>
 </div>
 
-<!-- REPORT SPLIT -->
+<!-- REPORT -->
 <div class="report-grid">
 
   <div class="report-box">
@@ -231,6 +262,9 @@ let chart;
 
 /* ADD INCOME */
 function addIncome(){
+
+  if(!incomeAmount.value || !incomeType.value) return;
+
   data.push({
     type:"Income",
     category:incomeType.value,
@@ -239,6 +273,7 @@ function addIncome(){
     date:incomeDate.value
   });
 
+  incomeType.selectedIndex=0;
   incomeEvent.value="";
   incomeAmount.value="";
   incomeDate.value="";
@@ -248,6 +283,9 @@ function addIncome(){
 
 /* ADD EXPENSE */
 function addExpense(){
+
+  if(!expenseAmount.value || !expenseType.value) return;
+
   data.push({
     type:"Expense",
     category:expenseType.value,
@@ -256,6 +294,7 @@ function addExpense(){
     date:expenseDate.value
   });
 
+  expenseType.selectedIndex=0;
   expenseNotes.value="";
   expenseAmount.value="";
   expenseDate.value="";
@@ -281,31 +320,28 @@ function filtered(){
 function update(){
 
   let list=filtered();
+
   income=0; expense=0;
 
-  let incomeHTML="";
-  let expenseHTML="";
-  let profit={};
+  let incHTML="";
+  let expHTML="";
 
   list.forEach(d=>{
 
-    if(d.type=="Income"){
+    if(d.type==="Income"){
       income+=d.amount;
-      incomeHTML+=`<div class="item">${d.category}<br>${d.event}<br>₱${d.amount}</div>`;
+      incHTML+=`<div class="item">${d.category}<br>${d.event}<br>₱${d.amount}</div>`;
     }
 
-    if(d.type=="Expense"){
+    if(d.type==="Expense"){
       expense+=d.amount;
-      expenseHTML+=`<div class="item">${d.category}<br>${d.event}<br>₱${d.amount}</div>`;
+      expHTML+=`<div class="item">${d.category}<br>${d.event}<br>₱${d.amount}</div>`;
     }
 
-    if(!profit[d.event]) profit[d.event]={in:0,ex:0};
-
-    d.type=="Income" ? profit[d.event].in+=d.amount : profit[d.event].ex+=d.amount;
   });
 
-  incomeReport.innerHTML=incomeHTML;
-  expenseReport.innerHTML=expenseHTML;
+  incomeReport.innerHTML=incHTML;
+  expenseReport.innerHTML=expHTML;
 
   incomeTotal.innerText="₱"+income;
   expenseTotal.innerText="₱"+expense;
@@ -316,6 +352,7 @@ function update(){
 
 /* CHART */
 function drawChart(){
+
   if(chart) chart.destroy();
 
   chart=new Chart(chartCanvas,{
@@ -325,6 +362,7 @@ function drawChart(){
       datasets:[{data:[income,expense]}]
     }
   });
+
 }
 
 /* CLEAR */
