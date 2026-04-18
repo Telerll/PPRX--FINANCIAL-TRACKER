@@ -1,1 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>PPRX Financial Tracker</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+/* =========================
+   RESET
+========================= */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, sans-serif;
+}
+
+body{
+  background:linear-gradient(135deg,#06142e,#0b2a5a,#06142e);
+  color:#fff;
+  min-height:100vh;
+  padding:20px;
+}
+
+/* =========================
+   HEADER
+========================= */
+header{
+  text-align:center;
+  margin-bottom:20px;
+}
+header h1{
+  font-size:26px;
+  letter-spacing:1px;
+}
+header p{
+  color:#cfe3ff;
+  font-size:14px;
+}
+
+/* =========================
+   KPI CARDS
+========================= */
+.kpi{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+  margin-top:20px;
+}
+
+.card{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:16px;
+  padding:16px;
+  backdrop-filter:blur(10px);
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:translateY(-6px);
+  border-color:rgba(255,165,0,0.4);
+}
+
+.card h3{
+  font-size:13px;
+  color:#cfe3ff;
+}
+.card h1{
+  margin-top:10px;
+  font-size:20px;
+}
+
+/* =========================
+   INPUT FORM
+========================= */
+.form{
+  margin-top:25px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:10px;
+}
+
+input,select,button{
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  outline:none;
+}
+
+input,select{
+  background:rgba(255,255,255,0.08);
+  color:#fff;
+}
+
+option{
+  color:#000;
+}
+
+button{
+  background:linear-gradient(90deg,#ff9800,#ffb347);
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  transform:scale(1.05);
+}
+
+/* =========================
+   LIST
+========================= */
+.list{
+  margin-top:20px;
+}
+
+.item{
+  display:flex;
+  justify-content:space-between;
+  padding:10px;
+  background:rgba(255,255,255,0.05);
+  border-radius:10px;
+  margin-top:8px;
+}
+
+/* =========================
+   CHART
+========================= */
+.chartBox{
+  margin-top:30px;
+  background:rgba(255,255,255,0.05);
+  padding:20px;
+  border-radius:16px;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+  <h1>PPRX FINANCIAL TRACKER</h1>
+  <p>Income • Expenses • Analytics Dashboard</p>
+</header>
+
+<!-- KPI -->
+<section class="kpi">
+  <div class="card">
+    <h3>Total Income</h3>
+    <h1 id="income">₱0</h1>
+  </div>
+
+  <div class="card">
+    <h3>Total Expenses</h3>
+    <h1 id="expense">₱0</h1>
+  </div>
+
+  <div class="card">
+    <h3>Net Income</h3>
+    <h1 id="net">₱0</h1>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="form">
+
+  <input id="desc" placeholder="Description">
+
+  <select id="type">
+    <option value="income">Income</option>
+    <option value="expense">Expense</option>
+  </select>
+
+  <select id="category">
+
+    <option>Event Income</option>
+    <option>Rate per Event</option>
+
+    <option>Rentals</option>
+    <option>Diesel Fuel</option>
+    <option>Transportation</option>
+    <option>Salary</option>
+    <option>Food</option>
+    <option>Allowances</option>
+    <option>Repair & Maintenance</option>
+    <option>Office Supplies</option>
+    <option>Stocks / Equipment</option>
+    <option>Permits</option>
+    <option>Bills</option>
+    <option>Utilities</option>
+    <option>Water</option>
+    <option>Electric</option>
+    <option>Telephone Lines</option>
+
+  </select>
+
+  <input id="amount" type="number" placeholder="Amount">
+
+  <button onclick="add()">ADD</button>
+
+</section>
+
+<!-- LIST -->
+<section class="list" id="list"></section>
+
+<!-- CHART -->
+<section class="chartBox">
+  <canvas id="chart"></canvas>
+</section>
+
+<script>
+
+let data = JSON.parse(localStorage.getItem("pprx_finance")) || [];
+
+function add(){
+
+  let d = document.getElementById("desc").value;
+  let t = document.getElementById("type").value;
+  let c = document.getElementById("category").value;
+  let a = parseFloat(document.getElementById("amount").value);
+
+  if(!d || !a) return;
+
+  data.push({d,t,c,a});
+
+  localStorage.setItem("pprx_finance",JSON.stringify(data));
+
+  render();
+}
+
+function render(){
+
+  let income = 0;
+  let expense = 0;
+
+  let html = "";
+
+  data.forEach(i=>{
+
+    if(i.t=="income") income += i.a;
+    else expense += i.a;
+
+    html += `
+      <div class="item">
+        <span>${i.d} (${i.c})</span>
+        <b>₱${i.a}</b>
+      </div>
+    `;
+  });
+
+  document.getElementById("income").innerText = "₱"+income;
+  document.getElementById("expense").innerText = "₱"+expense;
+  document.getElementById("net").innerText = "₱"+(income-expense);
+
+  document.getElementById("list").innerHTML = html;
+
+  drawChart(income,expense);
+}
+
+function drawChart(i,e){
+
+  document.getElementById("chart").remove();
+  document.querySelector(".chartBox").innerHTML = `<canvas id="chart"></canvas>`;
+
+  new Chart(document.getElementById("chart"),{
+    type:"doughnut",
+    data:{
+      labels:["Income","Expenses"],
+      datasets:[{
+        data:[i,e]
+      }]
+    }
+  });
+}
+
+render();
+
+</script>
+
+</body>
+</html>
