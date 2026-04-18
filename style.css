@@ -9,13 +9,13 @@
 }
 
 body{
-  background: radial-gradient(circle at top,#0b1f3a,#050b18 60%,#030712);
+  background: radial-gradient(circle at top,#0b1f3a,#071a33,#040812);
   color:#fff;
   padding:12px;
 }
 
 /* =========================
-   HEADER (METALLIC GLASS)
+   HEADER (GLASS METALLIC BAR)
 ========================= */
 .header{
   background: linear-gradient(135deg, rgba(0,198,255,0.9), rgba(0,114,255,0.85));
@@ -27,72 +27,87 @@ body{
   justify-content:center;
   gap:12px;
   box-shadow:
-    0 10px 30px rgba(0,0,0,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.2);
+    0 10px 30px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.25);
 }
 
 /* =========================
-   LOGO (METAL STYLE)
+   LOGO (CIRCULAR GLASS METAL)
 ========================= */
 .logo{
-  width:42px;
-  height:42px;
-  border-radius:12px;
-  background: linear-gradient(145deg,#ffffff,#cfd9e6);
-  color:#0a58ff;
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
   display:flex;
   align-items:center;
   justify-content:center;
+
   font-weight:bold;
+  color:#fff;
+
+  border:1px solid rgba(255,255,255,0.25);
+
   box-shadow:
-    inset 2px 2px 5px rgba(255,255,255,0.8),
-    inset -3px -3px 6px rgba(0,0,0,0.2),
-    0 6px 15px rgba(0,0,0,0.4);
+    0 8px 20px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.35);
+}
+
+/* light reflection */
+.logo::before{
+  content:"";
+  position:absolute;
+  width:60%;
+  height:60%;
+  top:-20%;
+  left:-20%;
+  background:rgba(255,255,255,0.25);
+  transform:rotate(25deg);
+  filter:blur(6px);
+  opacity:0.6;
 }
 
 /* =========================
-   KPI CARDS (GLASS + HOVER)
+   KPI GLASS CARDS
 ========================= */
 .kpi{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:12px;
+  gap:10px;
   margin-top:12px;
 }
 
 .card{
   background: rgba(255,255,255,0.06);
   backdrop-filter: blur(14px);
-  border:1px solid rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.12);
   padding:14px;
   border-radius:16px;
   text-align:center;
-  transition:0.3s ease;
-  box-shadow:0 8px 20px rgba(0,0,0,0.25);
+  transition:0.25s ease;
+  box-shadow:0 8px 22px rgba(0,0,0,0.25);
 }
 
-/* 🔥 HOVER EFFECT PER CARD */
 .card:hover{
   transform: translateY(-6px) scale(1.02);
   background: rgba(255,255,255,0.12);
-  box-shadow:
-    0 12px 30px rgba(0,0,0,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.2);
 }
 
-/* ACCENT COLORS */
 .income{border-left:4px solid #00ff9d;}
 .expense{border-left:4px solid #ff4d4d;}
 .net{border-left:4px solid #ffb300;}
 
 .card b{
   font-size:18px;
+  margin-top:5px;
   display:block;
-  margin-top:6px;
 }
 
 /* =========================
-   LEFT / RIGHT MODULES (GLASS BOXES)
+   LEFT / RIGHT MODULES
 ========================= */
 .grid{
   display:grid;
@@ -104,28 +119,26 @@ body{
 .module{
   background: rgba(255,255,255,0.05);
   backdrop-filter: blur(16px);
-  border:1px solid rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.1);
   padding:14px;
   border-radius:16px;
   box-shadow:0 10px 25px rgba(0,0,0,0.3);
-  transition:0.3s;
+  transition:0.2s;
 }
 
-/* MODULE HOVER */
 .module:hover{
   transform: translateY(-4px);
-  background: rgba(255,255,255,0.08);
 }
 
 /* =========================
-   INPUT STYLE (MODERN GLASS)
+   INPUTS (GLASS STYLE)
 ========================= */
 input,select{
   width:100%;
   margin-top:8px;
   padding:10px;
   border-radius:10px;
-  border:1px solid rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.12);
   background: rgba(15,42,82,0.6);
   color:#fff;
   outline:none;
@@ -134,7 +147,7 @@ input,select{
 
 input:focus,select:focus{
   border:1px solid #00c6ff;
-  box-shadow:0 0 8px rgba(0,198,255,0.5);
+  box-shadow:0 0 10px rgba(0,198,255,0.4);
 }
 
 /* =========================
@@ -146,21 +159,20 @@ button{
   padding:10px;
   border:none;
   border-radius:10px;
-  background: linear-gradient(135deg,#ff9800,#ffb347,#ffd28a);
+  background: linear-gradient(135deg,#ff9800,#ffb347,#ffd59a);
   font-weight:bold;
   cursor:pointer;
   transition:0.2s;
-  box-shadow:0 6px 15px rgba(0,0,0,0.3);
+  box-shadow:0 6px 18px rgba(0,0,0,0.3);
 }
 
-/* BUTTON HOVER */
 button:hover{
   transform: scale(1.03);
   box-shadow:0 10px 25px rgba(0,0,0,0.5);
 }
 
 /* =========================
-   FILTER BOX
+   FILTER PANEL
 ========================= */
 .filter{
   margin-top:12px;
@@ -174,7 +186,7 @@ button:hover{
 }
 
 /* =========================
-   REPORT ITEMS (GLASS LIST)
+   REPORT ITEMS
 ========================= */
 .item{
   background: rgba(255,255,255,0.06);
@@ -186,14 +198,13 @@ button:hover{
   transition:0.2s;
 }
 
-/* ITEM HOVER */
 .item:hover{
+  transform: translateX(5px);
   background: rgba(255,255,255,0.12);
-  transform: translateX(4px);
 }
 
 /* =========================
-   PROFIT PANEL
+   PROFIT BOX
 ========================= */
 .profit{
   margin-top:12px;
@@ -204,7 +215,7 @@ button:hover{
 }
 
 /* =========================
-   CHART BOX
+   CHART
 ========================= */
 .chart{
   margin-top:12px;
@@ -218,7 +229,6 @@ button:hover{
    RESPONSIVE
 ========================= */
 @media(max-width:768px){
-
   .grid{
     grid-template-columns:1fr;
   }
