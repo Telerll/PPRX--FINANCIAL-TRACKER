@@ -174,6 +174,11 @@ button{
   padding:10px;
   margin-top:8px;
   border-radius:10px;
+  line-height:1.5;
+}
+
+.item small{
+  color:rgba(255,255,255,0.65);
 }
 
 /* CHART */
@@ -182,6 +187,21 @@ button{
   background:rgba(255,255,255,0.05);
   padding:12px;
   border-radius:14px;
+}
+
+.chart h3{
+  margin-bottom:10px;
+}
+
+.chart-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.chart-box{
+  min-height:280px;
+  position:relative;
 }
 
 /* ANIMATION */
@@ -204,7 +224,7 @@ button{
 
 /* MOBILE */
 @media(max-width:768px){
-  .grid,.kpi,.report-grid{
+  .grid,.kpi,.report-grid,.chart-grid{
     grid-template-columns:1fr;
   }
 }
@@ -265,6 +285,7 @@ button{
 
 <input id="incomeEvent" placeholder="Event / Client">
 <input id="incomeAmount" type="number" placeholder="Amount">
+<input id="incomeDate" type="date">
 
 <button onclick="addIncome()">ADD INCOME</button>
 </div>
@@ -293,7 +314,8 @@ button{
 </select>
 
 <input id="expenseNotes" placeholder="Notes">
-<input id="expenseAmount" type="number">
+<input id="expenseAmount" type="number" placeholder="Amount">
+<input id="expenseDate" type="date">
 
 <button onclick="addExpense()">ADD EXPENSE</button>
 </div>
@@ -306,21 +328,66 @@ button{
 </div>
 
 <div class="chart">
-<canvas id="chartCanvas"></canvas>
+<h3>GRAPHS / DONUT CHARTS</h3>
+<div class="chart-grid">
+  <div class="chart-box">
+    <canvas id="chartCanvas"></canvas>
+  </div>
+  <div class="chart-box">
+    <canvas id="categoryChartCanvas"></canvas>
+  </div>
+</div>
 </div>
 
 <script>
-let data=[], income=0, expense=0, chart;
+let data = JSON.parse(localStorage.getItem("pprxData")) || [];
+let income=0, expense=0, chart, categoryChart;
+
+function save(){
+  localStorage.setItem("pprxData", JSON.stringify(data));
+}
+
+function today(){
+  return new Date().toISOString().split("T")[0];
+}
 
 function addIncome(){
-if(!incomeAmount.value) return;
-data.push({type:"Income",category:incomeType.value,amount:+incomeAmount.value});
+if(!incomeType.value || !incomeAmount.value) return;
+
+data.push({
+  type:"Income",
+  category:incomeType.value,
+  event:incomeEvent.value,
+  amount:+incomeAmount.value,
+  date:incomeDate.value || today()
+});
+
+incomeType.value="";
+incomeEvent.value="";
+incomeAmount.value="";
+incomeDate.value="";
+
+save();
 update();
 }
 
 function addExpense(){
-if(!expenseAmount.value) return;
-data.push({type:"Expense",category:expenseType.value,amount:+expenseAmount.value});
+if(!expenseType.value || !expenseAmount.value) return;
+
+data.push({
+  type:"Expense",
+  category:expenseType.value,
+  event:expenseNotes.value,
+  amount:+expenseAmount.value,
+  date:expenseDate.value || today()
+});
+
+expenseType.value="";
+expenseNotes.value="";
+expenseAmount.value="";
+expenseDate.value="";
+
+save();
 update();
 }
 
@@ -332,29 +399,120 @@ expenseReport.innerHTML="";
 data.forEach(d=>{
 if(d.type==="Income"){
 income+=d.amount;
-incomeReport.innerHTML+=`<div class="item">${d.category}<br>₱${d.amount}</div>`;
+incomeReport.innerHTML+=`
+<div class="item">
+<b>${d.category}</b><br>
+${d.event || "No event/client"}<br>
+₱${d.amount.toLocaleString()}<br>
+<small>${d.date || ""}</small>
+</div>`;
 }
+
 if(d.type==="Expense"){
 expense+=d.amount;
-expenseReport.innerHTML+=`<div class="item">${d.category}<br>₱${d.amount}</div>`;
+expenseReport.innerHTML+=`
+<div class="item">
+<b>${d.category}</b><br>
+${d.event || "No notes"}<br>
+₱${d.amount.toLocaleString()}<br>
+<small>${d.date || ""}</small>
+</div>`;
 }
 });
 
-incomeTotal.innerText="₱"+income;
-expenseTotal.innerText="₱"+expense;
-netTotal.innerText="₱"+(income-expense);
+incomeTotal.innerText="₱"+income.toLocaleString();
+expenseTotal.innerText="₱"+expense.toLocaleString();
+netTotal.innerText="₱"+(income-expense).toLocaleString();
 entryTotal.innerText=data.length;
 
 drawChart();
+drawCategoryChart();
 }
 
 function drawChart(){
 if(chart) chart.destroy();
+
 chart=new Chart(chartCanvas,{
 type:"doughnut",
-data:{labels:["Income","Expense"],datasets:[{data:[income,expense]}]}
+data:{
+labels:["Income","Expense"],
+datasets:[{
+data:[income,expense],
+backgroundColor:["#00ff9d","#ff4d4d"],
+borderWidth:0
+}]
+},
+options:{
+responsive:true,
+maintainAspectRatio:false,
+cutout:"70%",
+plugins:{
+legend:{
+labels:{color:"#fff"}
+},
+title:{
+display:true,
+text:"Income vs Expense",
+color:"#fff"
+}
+}
+}
 });
 }
+
+function drawCategoryChart(){
+let expenseCategories={};
+
+data.forEach(d=>{
+if(d.type==="Expense"){
+if(!expenseCategories[d.category]) expenseCategories[d.category]=0;
+expenseCategories[d.category]+=d.amount;
+}
+});
+
+let labels=Object.keys(expenseCategories);
+let values=Object.values(expenseCategories);
+
+if(categoryChart) categoryChart.destroy();
+
+categoryChart=new Chart(categoryChartCanvas,{
+type:"doughnut",
+data:{
+labels:labels.length ? labels : ["No Expense Yet"],
+datasets:[{
+data:values.length ? values : [1],
+backgroundColor:[
+"#ff4d4d",
+"#ff9800",
+"#ffd54f",
+"#00ff9d",
+"#38bdf8",
+"#a855f7",
+"#f472b6",
+"#94a3b8"
+],
+borderWidth:0
+}]
+},
+options:{
+responsive:true,
+maintainAspectRatio:false,
+cutout:"65%",
+plugins:{
+legend:{
+labels:{color:"#fff"}
+},
+title:{
+display:true,
+text:"Expense Category Breakdown",
+color:"#fff"
+}
+}
+}
+});
+}
+
+update();
 </script>
 
 </body>
