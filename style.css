@@ -64,9 +64,9 @@ body{
 /* LOGO */
 .main-logo{
   display:block;
-  width:130px;
+  width:100px;
   height:auto;
-  margin:0;
+  margin:0 0 -18px 0;
   padding:0;
 
   filter:
