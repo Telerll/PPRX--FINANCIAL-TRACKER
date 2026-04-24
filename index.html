@@ -6,6 +6,7 @@
 <title>PPRX Financial Tracking System</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
@@ -25,24 +26,18 @@ body{
   background:linear-gradient(135deg,#0ea5e9,#2563eb,#1e3a8a,#0ea5e9);
   background-size:400% 400%;
   animation:gradientMove 6s ease infinite;
-
   padding:14px 10px;
   border-radius:16px;
-
   min-height:170px;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   position:relative;
   overflow:hidden;
-
   border:1px solid rgba(255,255,255,0.18);
   box-shadow:0 14px 32px rgba(0,0,0,0.38);
 }
 
-/* SHINE */
 .header::before{
   content:"";
   position:absolute;
@@ -55,7 +50,6 @@ body{
   animation:shineMove 4s ease-in-out infinite;
 }
 
-/* BRAND (FIXED SPACING) */
 .brand{
   display:flex;
   flex-direction:column;
@@ -65,36 +59,29 @@ body{
   z-index:2;
 }
 
-/* LOGO */
 .main-logo{
   display:block;
   width:100%;
   max-width:135px;
   margin:0;
   padding:0;
-
   filter:
     drop-shadow(0 8px 18px rgba(0,0,0,0.55))
     drop-shadow(0 0 12px rgba(255,255,255,0.16));
-
   animation:logoPulse 3s ease-in-out infinite;
 }
 
-/* TEXT */
 .system-title{
   margin:0;
   padding:0;
   position:relative;
   top:-2px;
-
   font-size:12px;
   font-weight:900;
   letter-spacing:2px;
   line-height:1;
-
   color:#e0f2fe;
   text-transform:uppercase;
-
   text-shadow:
     0 0 6px rgba(255,255,255,0.45),
     0 0 14px rgba(56,189,248,0.55);
@@ -153,6 +140,33 @@ button{
   border-radius:10px;
   background:linear-gradient(90deg,#ff9800,#ffb347);
   font-weight:bold;
+  cursor:pointer;
+}
+
+.btn-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.btn-blue{background:linear-gradient(90deg,#38bdf8,#2563eb);color:#fff}
+.btn-red{background:linear-gradient(90deg,#ef4444,#fb7185);color:#fff}
+.btn-small{
+  width:auto;
+  padding:6px 10px;
+  font-size:11px;
+  margin-right:5px;
+}
+
+/* FILTER */
+.filter{
+  margin-top:12px;
+  background:rgba(255,255,255,0.05);
+  padding:12px;
+  border-radius:14px;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1.4fr;
+  gap:8px;
 }
 
 /* REPORT */
@@ -167,7 +181,13 @@ button{
   background:rgba(255,255,255,0.05);
   padding:12px;
   border-radius:14px;
+  max-height:380px;
+  overflow-y:auto;
 }
+
+.report-box::-webkit-scrollbar{width:8px}
+.report-box::-webkit-scrollbar-thumb{background:rgba(255,179,71,.6);border-radius:20px}
+.report-box::-webkit-scrollbar-track{background:rgba(255,255,255,.06)}
 
 .item{
   background:rgba(255,255,255,0.05);
@@ -204,7 +224,6 @@ button{
   position:relative;
 }
 
-/* ANIMATION */
 @keyframes gradientMove{
   0%{background-position:0% 50%;}
   50%{background-position:100% 50%;}
@@ -222,9 +241,8 @@ button{
   50%{transform:scale(1.03);}
 }
 
-/* MOBILE */
 @media(max-width:768px){
-  .grid,.kpi,.report-grid,.chart-grid{
+  .grid,.kpi,.report-grid,.chart-grid,.filter,.btn-row{
     grid-template-columns:1fr;
   }
 }
@@ -287,7 +305,7 @@ button{
 <input id="incomeAmount" type="number" placeholder="Amount">
 <input id="incomeDate" type="date">
 
-<button onclick="addIncome()">ADD INCOME</button>
+<button onclick="addIncome()" id="incomeBtn">ADD INCOME</button>
 </div>
 
 <div class="module">
@@ -295,7 +313,6 @@ button{
 
 <select id="expenseType">
   <option value="" selected>Select Expense</option>
-
   <option>Diesel Fuel</option>
   <option>Transportation</option>
   <option>Food</option>
@@ -317,9 +334,25 @@ button{
 <input id="expenseAmount" type="number" placeholder="Amount">
 <input id="expenseDate" type="date">
 
-<button onclick="addExpense()">ADD EXPENSE</button>
+<button onclick="addExpense()" id="expenseBtn">ADD EXPENSE</button>
 </div>
 
+</div>
+
+<div class="filter">
+  <input type="date" id="filterFrom" onchange="update()">
+  <input type="date" id="filterTo" onchange="update()">
+  <select id="filterType" onchange="update()">
+    <option value="">All Types</option>
+    <option>Income</option>
+    <option>Expense</option>
+  </select>
+  <input id="filterSearch" oninput="update()" placeholder="Search category, event, notes">
+</div>
+
+<div class="btn-row">
+  <button class="btn-blue" onclick="exportExcel()">EXPORT TO EXCEL</button>
+  <button class="btn-red" onclick="clearAll()">CLEAR ALL</button>
 </div>
 
 <div class="report-grid">
@@ -328,7 +361,7 @@ button{
 </div>
 
 <div class="chart">
-<h3>GRAPHS / DONUT CHARTS</h3>
+<h3>EXPENSE VS INCOME</h3>
 <div class="chart-grid">
   <div class="chart-box">
     <canvas id="chartCanvas"></canvas>
@@ -342,6 +375,7 @@ button{
 <script>
 let data = JSON.parse(localStorage.getItem("pprxData")) || [];
 let income=0, expense=0, chart, categoryChart;
+let editIndex = null;
 
 function save(){
   localStorage.setItem("pprxData", JSON.stringify(data));
@@ -354,19 +388,23 @@ function today(){
 function addIncome(){
 if(!incomeType.value || !incomeAmount.value) return;
 
-data.push({
+let entry = {
   type:"Income",
   category:incomeType.value,
   event:incomeEvent.value,
   amount:+incomeAmount.value,
   date:incomeDate.value || today()
-});
+};
 
-incomeType.value="";
-incomeEvent.value="";
-incomeAmount.value="";
-incomeDate.value="";
+if(editIndex !== null){
+  data[editIndex] = entry;
+  editIndex = null;
+  incomeBtn.innerText = "ADD INCOME";
+}else{
+  data.push(entry);
+}
 
+clearIncomeForm();
 save();
 update();
 }
@@ -374,21 +412,59 @@ update();
 function addExpense(){
 if(!expenseType.value || !expenseAmount.value) return;
 
-data.push({
+let entry = {
   type:"Expense",
   category:expenseType.value,
   event:expenseNotes.value,
   amount:+expenseAmount.value,
   date:expenseDate.value || today()
-});
+};
 
+if(editIndex !== null){
+  data[editIndex] = entry;
+  editIndex = null;
+  expenseBtn.innerText = "ADD EXPENSE";
+}else{
+  data.push(entry);
+}
+
+clearExpenseForm();
+save();
+update();
+}
+
+function clearIncomeForm(){
+incomeType.value="";
+incomeEvent.value="";
+incomeAmount.value="";
+incomeDate.value="";
+}
+
+function clearExpenseForm(){
 expenseType.value="";
 expenseNotes.value="";
 expenseAmount.value="";
 expenseDate.value="";
+}
 
-save();
-update();
+function filteredData(){
+let from = filterFrom.value;
+let to = filterTo.value;
+let type = filterType.value;
+let search = filterSearch.value.toLowerCase();
+
+return data
+.map((d,i)=>({...d,index:i}))
+.filter(d=>{
+  if(from && d.date < from) return false;
+  if(to && d.date > to) return false;
+  if(type && d.type !== type) return false;
+
+  let text = `${d.type} ${d.category} ${d.event} ${d.amount} ${d.date}`.toLowerCase();
+  if(search && !text.includes(search)) return false;
+
+  return true;
+});
 }
 
 function update(){
@@ -396,7 +472,14 @@ income=0;expense=0;
 incomeReport.innerHTML="";
 expenseReport.innerHTML="";
 
-data.forEach(d=>{
+let list = filteredData();
+
+list.forEach(d=>{
+let buttons = `
+<button class="btn-small btn-blue" onclick="editItem(${d.index})">EDIT</button>
+<button class="btn-small btn-red" onclick="deleteItem(${d.index})">DELETE</button>
+`;
+
 if(d.type==="Income"){
 income+=d.amount;
 incomeReport.innerHTML+=`
@@ -404,7 +487,8 @@ incomeReport.innerHTML+=`
 <b>${d.category}</b><br>
 ${d.event || "No event/client"}<br>
 ₱${d.amount.toLocaleString()}<br>
-<small>${d.date || ""}</small>
+<small>${d.date || ""}</small><br>
+${buttons}
 </div>`;
 }
 
@@ -415,18 +499,75 @@ expenseReport.innerHTML+=`
 <b>${d.category}</b><br>
 ${d.event || "No notes"}<br>
 ₱${d.amount.toLocaleString()}<br>
-<small>${d.date || ""}</small>
+<small>${d.date || ""}</small><br>
+${buttons}
 </div>`;
 }
 });
 
+if(!incomeReport.innerHTML) incomeReport.innerHTML=`<div class="item">No income record found.</div>`;
+if(!expenseReport.innerHTML) expenseReport.innerHTML=`<div class="item">No expense record found.</div>`;
+
 incomeTotal.innerText="₱"+income.toLocaleString();
 expenseTotal.innerText="₱"+expense.toLocaleString();
 netTotal.innerText="₱"+(income-expense).toLocaleString();
-entryTotal.innerText=data.length;
+entryTotal.innerText=list.length;
 
 drawChart();
 drawCategoryChart();
+}
+
+function editItem(i){
+let d = data[i];
+editIndex = i;
+
+if(d.type === "Income"){
+  incomeType.value = d.category;
+  incomeEvent.value = d.event;
+  incomeAmount.value = d.amount;
+  incomeDate.value = d.date;
+  incomeBtn.innerText = "UPDATE INCOME";
+  expenseBtn.innerText = "ADD EXPENSE";
+}
+
+if(d.type === "Expense"){
+  expenseType.value = d.category;
+  expenseNotes.value = d.event;
+  expenseAmount.value = d.amount;
+  expenseDate.value = d.date;
+  expenseBtn.innerText = "UPDATE EXPENSE";
+  incomeBtn.innerText = "ADD INCOME";
+}
+
+window.scrollTo({top:document.querySelector(".grid").offsetTop,behavior:"smooth"});
+}
+
+function deleteItem(i){
+if(!confirm("Delete this entry?")) return;
+data.splice(i,1);
+save();
+update();
+}
+
+function clearAll(){
+if(!confirm("Clear all records?")) return;
+data=[];
+editIndex=null;
+save();
+update();
+}
+
+function exportExcel(){
+let rows = [["Type","Category","Event / Notes","Amount","Date"]];
+
+filteredData().forEach(d=>{
+  rows.push([d.type,d.category,d.event || "",d.amount,d.date || ""]);
+});
+
+let wb = XLSX.utils.book_new();
+let ws = XLSX.utils.aoa_to_sheet(rows);
+XLSX.utils.book_append_sheet(wb,ws,"PPRX Report");
+XLSX.writeFile(wb,"PPRX-Financial-Report.xlsx");
 }
 
 function drawChart(){
@@ -447,14 +588,8 @@ responsive:true,
 maintainAspectRatio:false,
 cutout:"70%",
 plugins:{
-legend:{
-labels:{color:"#fff"}
-},
-title:{
-display:true,
-text:"Income vs Expense",
-color:"#fff"
-}
+legend:{labels:{color:"#fff"}},
+title:{display:true,text:"Expense vs Income",color:"#fff"}
 }
 }
 });
@@ -463,7 +598,7 @@ color:"#fff"
 function drawCategoryChart(){
 let expenseCategories={};
 
-data.forEach(d=>{
+filteredData().forEach(d=>{
 if(d.type==="Expense"){
 if(!expenseCategories[d.category]) expenseCategories[d.category]=0;
 expenseCategories[d.category]+=d.amount;
@@ -482,14 +617,8 @@ labels:labels.length ? labels : ["No Expense Yet"],
 datasets:[{
 data:values.length ? values : [1],
 backgroundColor:[
-"#ff4d4d",
-"#ff9800",
-"#ffd54f",
-"#00ff9d",
-"#38bdf8",
-"#a855f7",
-"#f472b6",
-"#94a3b8"
+"#ff4d4d","#ff9800","#ffd54f","#00ff9d",
+"#38bdf8","#a855f7","#f472b6","#94a3b8"
 ],
 borderWidth:0
 }]
@@ -499,14 +628,8 @@ responsive:true,
 maintainAspectRatio:false,
 cutout:"65%",
 plugins:{
-legend:{
-labels:{color:"#fff"}
-},
-title:{
-display:true,
-text:"Expense Category Breakdown",
-color:"#fff"
-}
+legend:{labels:{color:"#fff"}},
+title:{display:true,text:"Expense Category Breakdown",color:"#fff"}
 }
 }
 });
