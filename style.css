@@ -446,3 +446,32 @@ button:active{
   30%{opacity:1}
   100%{left:130%; opacity:0}
 }
+/* FORCE ANIMATION FIX */
+.header{
+  background:linear-gradient(135deg,#0ea5e9,#2563eb,#1e3a8a,#0ea5e9);
+  background-size:400% 400%;
+  animation:gradientMove 5s linear infinite;
+}
+
+/* SHINE EFFECT */
+.header::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:50%;
+  height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
+  animation:shineMove 3s linear infinite;
+}
+
+/* KEYFRAMES */
+@keyframes gradientMove{
+  0%{background-position:0% 50%;}
+  100%{background-position:100% 50%;}
+}
+
+@keyframes shineMove{
+  0%{left:-100%;}
+  100%{left:150%;}
+}
