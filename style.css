@@ -409,3 +409,40 @@ button:active{
     border-radius:16px;
   }
 }
+.header{
+  background:linear-gradient(135deg,#0ea5e9,#2563eb,#1e3a8a,#0ea5e9);
+  background-size:300% 300%;
+  position:relative;
+  overflow:hidden;
+  animation:gradientMove 6s ease infinite, float 4s ease-in-out infinite;
+}
+
+.header::before{
+  content:"";
+  position:absolute;
+  top:-50%;
+  left:-80%;
+  width:60%;
+  height:200%;
+  background:linear-gradient(120deg, transparent, rgba(255,255,255,.35), transparent);
+  transform:rotate(25deg);
+  animation:shine 4s ease-in-out infinite;
+}
+
+.main-logo,
+.system-title{
+  position:relative;
+  z-index:1;
+}
+
+@keyframes gradientMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+@keyframes shine{
+  0%{left:-80%; opacity:0}
+  30%{opacity:1}
+  100%{left:130%; opacity:0}
+}
