@@ -32,9 +32,9 @@ body{
    FINAL HEADER (STABLE)
 ========================= */
 .header{
-  height:170px;
-  padding:12px 10px;
-  border-radius:18px;
+  height:120px;
+  padding:8px 10px;
+  border-radius:16px;
 
   background:
     radial-gradient(circle at 25% 45%, rgba(255,179,71,.35), transparent 35%),
