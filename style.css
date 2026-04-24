@@ -235,3 +235,19 @@ button{
     font-size:10px;
   }
 }
+.header{
+  height:120px !important;
+  min-height:120px !important;
+  max-height:120px !important;
+  padding:8px 10px !important;
+}
+
+.main-logo{
+  width:90px !important;
+  max-width:90px !important;
+}
+
+.system-title{
+  font-size:10px !important;
+  margin-top:-6px !important;
+}
