@@ -11,87 +11,93 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 
 body{
-  background:radial-gradient(circle at top,#0c2340,#071a33,#040712);
+  min-height:100vh;
+  background:
+    radial-gradient(circle at top left, rgba(14,165,233,0.26), transparent 32%),
+    radial-gradient(circle at top right, rgba(255,179,71,0.16), transparent 30%),
+    radial-gradient(circle at top,#0c2340,#071a33,#040712);
   color:#fff;
   padding:12px;
 }
 
 /* HEADER */
 .header{
-  background:
-    radial-gradient(circle at 22% 50%, rgba(255,170,0,.35), transparent 35%),
-    linear-gradient(135deg,#030712,#07111f,#0b1f3a);
+  background:linear-gradient(135deg,#0ea5e9,#2563eb,#1e3a8a,#0ea5e9);
+  background-size:400% 400%;
+  animation:gradientMove 6s ease infinite;
 
   padding:14px 10px;
-  border-radius:18px;
+  border-radius:16px;
+
   min-height:170px;
 
   display:flex;
   align-items:center;
   justify-content:center;
-  text-align:center;
 
   position:relative;
   overflow:hidden;
 
-  border:1px solid rgba(255,179,71,.25);
-  box-shadow:0 15px 40px rgba(0,0,0,.5);
+  border:1px solid rgba(255,255,255,0.18);
+  box-shadow:0 14px 32px rgba(0,0,0,0.38);
 }
 
+/* SHINE */
 .header::before{
   content:"";
   position:absolute;
   top:-50%;
-  left:-80%;
-  width:60%;
+  left:-90%;
+  width:55%;
   height:200%;
-  background:linear-gradient(120deg,transparent,rgba(255,255,255,.3),transparent);
+  background:linear-gradient(120deg, transparent, rgba(255,255,255,.35), transparent);
   transform:rotate(25deg);
-  animation:shine 4s ease-in-out infinite;
+  animation:shineMove 4s ease-in-out infinite;
 }
 
+/* BRAND (FIXED SPACING) */
 .brand{
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   gap:0;
-  position:relative;
-  z-index:5;
+  z-index:2;
 }
 
+/* LOGO */
 .main-logo{
   display:block;
-  max-width:155px;
   width:100%;
+  max-width:135px;
   margin:0;
   padding:0;
 
   filter:
-    drop-shadow(0 10px 25px rgba(0,0,0,.6))
-    drop-shadow(0 0 18px rgba(255,170,0,.4));
+    drop-shadow(0 8px 18px rgba(0,0,0,0.55))
+    drop-shadow(0 0 12px rgba(255,255,255,0.16));
 
-  animation:pulse 3s ease-in-out infinite;
+  animation:logoPulse 3s ease-in-out infinite;
 }
 
+/* TEXT */
 .system-title{
-  display:block;
   margin:0;
   padding:0;
-
   position:relative;
   top:-2px;
 
-  color:#ffffff;
   font-size:12px;
   font-weight:900;
-  line-height:1;
   letter-spacing:2px;
+  line-height:1;
+
+  color:#e0f2fe;
   text-transform:uppercase;
 
   text-shadow:
-    0 0 8px rgba(255,255,255,.9),
-    0 0 18px rgba(255,179,71,.5);
+    0 0 6px rgba(255,255,255,0.45),
+    0 0 14px rgba(56,189,248,0.55);
 }
 
 /* KPI */
@@ -103,8 +109,7 @@ body{
 }
 
 .card{
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,0.06);
   padding:12px;
   border-radius:14px;
   text-align:center;
@@ -123,22 +128,23 @@ body{
 }
 
 .module{
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.09);
+  background:rgba(255,255,255,0.05);
   padding:12px;
   border-radius:14px;
 }
 
+/* INPUT */
 input,select{
   width:100%;
-  margin-top:8px;
+  margin-top:6px;
   padding:10px;
   border-radius:10px;
-  border:1px solid rgba(255,255,255,.12);
+  border:none;
   background:#0f2a52;
   color:#fff;
 }
 
+/* BUTTON */
 button{
   width:100%;
   margin-top:8px;
@@ -146,7 +152,6 @@ button{
   border:none;
   border-radius:10px;
   background:linear-gradient(90deg,#ff9800,#ffb347);
-  color:#111;
   font-weight:bold;
 }
 
@@ -158,51 +163,49 @@ button{
   margin-top:12px;
 }
 
-.report-box,.chart{
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.09);
+.report-box{
+  background:rgba(255,255,255,0.05);
   padding:12px;
   border-radius:14px;
 }
 
 .item{
-  background:rgba(255,255,255,.06);
+  background:rgba(255,255,255,0.05);
   padding:10px;
   margin-top:8px;
   border-radius:10px;
-  font-size:13px;
 }
 
-.chart{margin-top:12px}
-
-@keyframes shine{
-  0%{left:-80%;opacity:0}
-  30%{opacity:1}
-  100%{left:130%;opacity:0}
+/* CHART */
+.chart{
+  margin-top:12px;
+  background:rgba(255,255,255,0.05);
+  padding:12px;
+  border-radius:14px;
 }
 
-@keyframes pulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.04)}
+/* ANIMATION */
+@keyframes gradientMove{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
 }
 
+@keyframes shineMove{
+  0%{left:-90%;opacity:0;}
+  30%{opacity:1;}
+  100%{left:140%;opacity:0;}
+}
+
+@keyframes logoPulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.03);}
+}
+
+/* MOBILE */
 @media(max-width:768px){
   .grid,.kpi,.report-grid{
     grid-template-columns:1fr;
-  }
-
-  .header{
-    min-height:155px;
-    padding:12px 8px;
-  }
-
-  .main-logo{
-    max-width:135px;
-  }
-
-  .system-title{
-    font-size:11px;
-    letter-spacing:1.4px;
   }
 }
 </style>
@@ -212,7 +215,7 @@ button{
 
 <div class="header">
   <div class="brand">
-    <img src="logo.png" class="main-logo" alt="PPRX Logo">
+    <img src="logo.png" class="main-logo">
     <div class="system-title">FINANCIAL TRACKING SYSTEM</div>
   </div>
 </div>
@@ -262,7 +265,6 @@ button{
 
 <input id="incomeEvent" placeholder="Event / Client">
 <input id="incomeAmount" type="number" placeholder="Amount">
-<input id="incomeDate" type="date">
 
 <button onclick="addIncome()">ADD INCOME</button>
 </div>
@@ -290,9 +292,8 @@ button{
   <option>Other</option>
 </select>
 
-<input id="expenseNotes" placeholder="Notes / Related Event">
-<input id="expenseAmount" type="number" placeholder="Amount">
-<input id="expenseDate" type="date">
+<input id="expenseNotes" placeholder="Notes">
+<input id="expenseAmount" type="number">
 
 <button onclick="addExpense()">ADD EXPENSE</button>
 </div>
@@ -300,134 +301,60 @@ button{
 </div>
 
 <div class="report-grid">
-  <div class="report-box">
-    <h3>INCOME</h3>
-    <div id="incomeReport"></div>
-  </div>
-
-  <div class="report-box">
-    <h3>EXPENSE</h3>
-    <div id="expenseReport"></div>
-  </div>
+<div class="report-box"><h3>INCOME</h3><div id="incomeReport"></div></div>
+<div class="report-box"><h3>EXPENSE</h3><div id="expenseReport"></div></div>
 </div>
 
 <div class="chart">
-  <canvas id="chartCanvas"></canvas>
+<canvas id="chartCanvas"></canvas>
 </div>
 
 <script>
-let data = JSON.parse(localStorage.getItem("pprxData")) || [];
-let income = 0, expense = 0, chart;
-
-function save(){
-  localStorage.setItem("pprxData", JSON.stringify(data));
-}
+let data=[], income=0, expense=0, chart;
 
 function addIncome(){
-  if(!incomeType.value || !incomeAmount.value){
-    alert("Please select income type and enter amount.");
-    return;
-  }
-
-  data.push({
-    type:"Income",
-    category:incomeType.value,
-    event:incomeEvent.value || "No event/client",
-    amount:+incomeAmount.value,
-    date:incomeDate.value
-  });
-
-  reset();
-  save();
-  update();
+if(!incomeAmount.value) return;
+data.push({type:"Income",category:incomeType.value,amount:+incomeAmount.value});
+update();
 }
 
 function addExpense(){
-  if(!expenseType.value || !expenseAmount.value){
-    alert("Please select expense type and enter amount.");
-    return;
-  }
-
-  data.push({
-    type:"Expense",
-    category:expenseType.value,
-    event:expenseNotes.value || "No notes",
-    amount:+expenseAmount.value,
-    date:expenseDate.value
-  });
-
-  reset();
-  save();
-  update();
-}
-
-function reset(){
-  document.querySelectorAll("input").forEach(i=>i.value="");
-  incomeType.value="";
-  expenseType.value="";
+if(!expenseAmount.value) return;
+data.push({type:"Expense",category:expenseType.value,amount:+expenseAmount.value});
+update();
 }
 
 function update(){
-  income=0;
-  expense=0;
-  incomeReport.innerHTML="";
-  expenseReport.innerHTML="";
+income=0;expense=0;
+incomeReport.innerHTML="";
+expenseReport.innerHTML="";
 
-  data.forEach(d=>{
-    if(d.type==="Income"){
-      income+=d.amount;
-      incomeReport.innerHTML+=`
-        <div class="item">
-          <b>${d.category}</b><br>
-          ${d.event}<br>
-          ₱${d.amount.toLocaleString()}<br>
-          ${d.date || ""}
-        </div>`;
-    }
+data.forEach(d=>{
+if(d.type==="Income"){
+income+=d.amount;
+incomeReport.innerHTML+=`<div class="item">${d.category}<br>₱${d.amount}</div>`;
+}
+if(d.type==="Expense"){
+expense+=d.amount;
+expenseReport.innerHTML+=`<div class="item">${d.category}<br>₱${d.amount}</div>`;
+}
+});
 
-    if(d.type==="Expense"){
-      expense+=d.amount;
-      expenseReport.innerHTML+=`
-        <div class="item">
-          <b>${d.category}</b><br>
-          ${d.event}<br>
-          ₱${d.amount.toLocaleString()}<br>
-          ${d.date || ""}
-        </div>`;
-    }
-  });
+incomeTotal.innerText="₱"+income;
+expenseTotal.innerText="₱"+expense;
+netTotal.innerText="₱"+(income-expense);
+entryTotal.innerText=data.length;
 
-  incomeTotal.innerText="₱"+income.toLocaleString();
-  expenseTotal.innerText="₱"+expense.toLocaleString();
-  netTotal.innerText="₱"+(income-expense).toLocaleString();
-  entryTotal.innerText=data.length;
-
-  drawChart();
+drawChart();
 }
 
 function drawChart(){
-  if(chart) chart.destroy();
-
-  chart=new Chart(chartCanvas,{
-    type:"doughnut",
-    data:{
-      labels:["Income","Expense"],
-      datasets:[{
-        data:[income,expense],
-        backgroundColor:["#00ff9d","#ff4d4d"]
-      }]
-    },
-    options:{
-      plugins:{
-        legend:{
-          labels:{color:"#fff"}
-        }
-      }
-    }
-  });
+if(chart) chart.destroy();
+chart=new Chart(chartCanvas,{
+type:"doughnut",
+data:{labels:["Income","Expense"],datasets:[{data:[income,expense]}]}
+});
 }
-
-update();
 </script>
 
 </body>
